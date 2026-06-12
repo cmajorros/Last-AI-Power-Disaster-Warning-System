@@ -174,6 +174,30 @@ textarea { min-height: 86px; resize: vertical; }
 }
 .secondary { background: var(--night); }
 .ghost { background: white; color: var(--night); border: 1px solid var(--line); }
+.ai-panel {
+  border-top: 5px solid var(--blue);
+}
+.source-grid, .insight-list, .contact-grid {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+.source-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.source-card, .insight, .contact-card {
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  padding: 12px;
+}
+.source-card b, .insight b, .contact-card b { display: block; color: var(--night); margin-bottom: 6px; }
+.source-card p, .insight p, .contact-card p { margin: 0 0 8px; color: var(--muted); line-height: 1.4; }
+.source-card span {
+  display: inline-block;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
+.contact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
 .step { background: #0f172a; color: white; padding: 14px; min-height: 130px; }
 .step b { display: block; color: var(--amber); margin-bottom: 10px; }
@@ -184,5 +208,6 @@ textarea { min-height: 86px; resize: vertical; }
   .shell { grid-template-columns: 1fr; }
   .sidebar { position: static; }
   .metrics, .two, .form, .impact { grid-template-columns: 1fr; }
+  .source-grid, .contact-grid { grid-template-columns: 1fr; }
   .timeline { grid-template-columns: 1fr; }
 }
