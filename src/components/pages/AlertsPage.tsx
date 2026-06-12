@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Bot, Check, FilePenLine, Radio, Save, Send, XCircle } from "lucide-react";
+import { Bot, Check, FilePenLine, Inbox, Radio, Save, Send, Sparkles, UploadCloud, XCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useLanguage } from "@/components/LanguageProvider";
 import { EmptyState, SeverityPill, StatusPill, classNames, formatDate } from "@/components/ui";
@@ -10,7 +10,9 @@ import {
   notificationChannels,
   severities,
   type Alert,
+  type AlertDraftProposal,
   type AlertInput,
+  type IntakeSourceType,
   type NotificationChannel
 } from "@/lib/types";
 
@@ -40,6 +42,16 @@ export function AlertsPage() {
   const [messageLo, setMessageLo] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
+  const [intakeSourceType, setIntakeSourceType] = useState<IntakeSourceType>("gmail");
+  const [intakeSourceName, setIntakeSourceName] = useState("Gmail: flood-monitoring@village.la");
+  const [intakeText, setIntakeText] = useState(
+    "Subject: Urgent flood observation in Thakhek\nVillage volunteers report fast rising Mekong water near schools and the morning market. Several elderly residents and children may need transport to higher ground before nightfall."
+  );
+  const [targetAudienceNotes, setTargetAudienceNotes] = useState(
+    "Prioritize elders, children, schools, clinics, rescue boats, and village loudspeaker volunteers."
+  );
+  const [intakeFiles, setIntakeFiles] = useState<File[]>([]);
+  const [intakeProposal, setIntakeProposal] = useState<AlertDraftProposal | null>(null);
 
   const selected = useMemo(() => alerts.find((alert) => alert.id === selectedId) ?? alerts[0], [alerts, selectedId]);
 
@@ -77,6 +89,73 @@ export function AlertsPage() {
         ? current.communicationChannels.filter((item) => item !== channel)
         : [...current.communicationChannels, channel]
     }));
+  }
+
+  async function analyzeIntake() {
+    setError("");
+    setBusy("intake");
+    const formData = new FormData();
+    formData.set("sourceType", intakeSourceType);
+    formData.set("sourceName", intakeSourceName);
+    formData.set("rawText", intakeText);
+    formData.set("targetAudienceNotes", targetAudienceNotes);
+    intakeFiles.forEach((file) => formData.append("attachments", file));
+
+    const response = await fetch("/api/intake/analyze", {
+      method: "POST",
+      body: formData
+    });
+    const payload = await response.json();
+    setBusy("");
+    if (!response.ok) {
+      setError(payload.error || "Could not analyze intake");
+      return;
+    }
+    setIntakeProposal(payload.proposal);
+  }
+
+  function applyIntakeProposal() {
+    if (!intakeProposal) return;
+    setForm({
+      ...intakeProposal.alertInput,
+      startTime: toDateTimeLocal(intakeProposal.alertInput.startTime)
+    });
+  }
+
+  async function createAlertFromIntake() {
+    if (!intakeProposal) return;
+    setError("");
+    setBusy("intake-create");
+    const proposalForCreate: AlertDraftProposal = {
+      ...intakeProposal,
+      alertInput: form,
+      targetAudience: {
+        ...intakeProposal.targetAudience,
+        reviewerNotes: targetAudienceNotes,
+        suggestedChannels: form.communicationChannels
+      },
+      aiAssessment: {
+        ...intakeProposal.aiAssessment,
+        suggestedChannels: form.communicationChannels
+      }
+    };
+    const response = await fetch("/api/intake/create-alert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        proposal: proposalForCreate,
+        reviewerRoutingNotes: targetAudienceNotes,
+        communicationChannels: form.communicationChannels
+      })
+    });
+    const payload = await response.json();
+    setBusy("");
+    if (!response.ok) {
+      setError(payload.error || "Could not create alert from intake");
+      return;
+    }
+    setAlerts((current) => [payload.alert, ...current.filter((alert) => alert.id !== payload.alert.id)]);
+    setSelectedId(payload.alert.id);
   }
 
   async function createAlert(event: FormEvent<HTMLFormElement>) {
@@ -139,6 +218,128 @@ export function AlertsPage() {
     <AppShell>
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.2fr]">
         <section className="space-y-4">
+          <section className="rounded-lg border border-gov-line bg-white p-4 shadow-panel">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gov-ink">{t("aiIntake")}</h3>
+              <Inbox className="h-5 w-5 text-slate-500" aria-hidden />
+            </div>
+            <div className="grid gap-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="text-sm font-semibold text-slate-600">
+                  {t("intakeSource")}
+                  <select
+                    value={intakeSourceType}
+                    onChange={(event) => setIntakeSourceType(event.target.value as IntakeSourceType)}
+                    className="mt-1 w-full rounded-md border border-gov-line px-3 py-2"
+                  >
+                    <option value="gmail">Gmail</option>
+                    <option value="other_email">Other email</option>
+                    <option value="whatsapp_business">WhatsApp Business</option>
+                    <option value="manual_upload">Upload/manual</option>
+                  </select>
+                </label>
+                <label className="text-sm font-semibold text-slate-600">
+                  {t("sourceReference")}
+                  <input
+                    value={intakeSourceName}
+                    onChange={(event) => setIntakeSourceName(event.target.value)}
+                    className="mt-1 w-full rounded-md border border-gov-line px-3 py-2"
+                  />
+                </label>
+              </div>
+              <TextareaField label={t("incomingText")} value={intakeText} onChange={setIntakeText} />
+              <TextareaField
+                label={t("reviewerRoutingNotes")}
+                value={targetAudienceNotes}
+                onChange={setTargetAudienceNotes}
+              />
+              <label className="text-sm font-semibold text-slate-600">
+                {t("attachments")}
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf,.txt,.md,.csv,.json"
+                  onChange={(event) => setIntakeFiles(Array.from(event.target.files ?? []))}
+                  className="mt-1 w-full rounded-md border border-gov-line px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-bold file:text-gov-ink"
+                />
+              </label>
+              {intakeFiles.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {intakeFiles.map((file) => (
+                    <span key={`${file.name}-${file.size}`} className="rounded-md bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">
+                      {file.name}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+              <button
+                type="button"
+                onClick={analyzeIntake}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-700 px-4 py-3 text-sm font-bold text-white"
+                disabled={busy === "intake"}
+              >
+                <Sparkles className="h-4 w-4" aria-hidden />
+                {t("analyzeIntake")}
+              </button>
+            </div>
+          </section>
+
+          {intakeProposal ? (
+            <section className="rounded-lg border border-gov-line bg-white p-4 shadow-panel">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-lg font-bold text-gov-ink">{t("targetAudience")}</h3>
+                <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-bold text-slate-600">
+                  {intakeProposal.usedOpenAi ? "OpenAI" : "Demo fallback"} · {Math.round(intakeProposal.confidence * 100)}%
+                </span>
+              </div>
+              <div className="space-y-3 text-sm text-slate-700">
+                <div>
+                  <p className="text-xs font-bold uppercase text-slate-500">{t("sourceSummary")}</p>
+                  <p className="mt-1">{intakeProposal.sourceSummary}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase text-slate-500">{t("evidenceSummary")}</p>
+                  <p className="mt-1">{intakeProposal.evidenceSummary}</p>
+                </div>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div className="rounded-lg border border-gov-line p-3">
+                    <p className="text-xs font-bold uppercase text-slate-500">{t("routingGroups")}</p>
+                    <p className="mt-1">{intakeProposal.targetAudience.routingGroups.join(", ")}</p>
+                  </div>
+                  <div className="rounded-lg border border-gov-line p-3">
+                    <p className="text-xs font-bold uppercase text-slate-500">{t("suggestedChannels")}</p>
+                    <p className="mt-1">{intakeProposal.targetAudience.suggestedChannels.join(", ")}</p>
+                  </div>
+                </div>
+                {intakeProposal.qualityFlags.length > 0 ? (
+                  <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3">
+                    <p className="text-xs font-bold uppercase text-yellow-700">{t("qualityFlags")}</p>
+                    <p className="mt-1 text-yellow-800">{intakeProposal.qualityFlags.join(", ")}</p>
+                  </div>
+                ) : null}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={applyIntakeProposal}
+                  className="inline-flex items-center gap-2 rounded-md bg-slate-700 px-4 py-2 text-sm font-bold text-white"
+                >
+                  <UploadCloud className="h-4 w-4" aria-hidden />
+                  {t("applyToForm")}
+                </button>
+                <button
+                  type="button"
+                  onClick={createAlertFromIntake}
+                  className="inline-flex items-center gap-2 rounded-md bg-red-700 px-4 py-2 text-sm font-bold text-white"
+                  disabled={busy === "intake-create"}
+                >
+                  <Send className="h-4 w-4" aria-hidden />
+                  {t("createFromIntake")}
+                </button>
+              </div>
+            </section>
+          ) : null}
+
           <form onSubmit={createAlert} className="rounded-lg border border-gov-line bg-white p-4 shadow-panel">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-bold text-gov-ink">{t("createAlert")}</h3>
@@ -445,4 +646,12 @@ function TextareaField({
       />
     </label>
   );
+}
+
+function toDateTimeLocal(value: string) {
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) return value.slice(0, 16);
+  const date = new Date(timestamp);
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  return date.toISOString().slice(0, 16);
 }

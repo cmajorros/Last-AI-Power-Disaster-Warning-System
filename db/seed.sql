@@ -52,7 +52,7 @@ VALUES
   ('vol-001', 'Khamla Phengsavanh', 'demo:encrypted:+856205550451', '0451', true, 'Ban Nongbok', 'Thakhek', 'Khammouane', ST_GeomFromText('POLYGON((104.78 17.37,104.88 17.37,104.88 17.46,104.78 17.46,104.78 17.37))', 4326), 'lo'),
   ('vol-002', 'Maly Chanthavong', 'demo:encrypted:+856205550627', '0627', true, 'Ban Phonsavang', 'Kaysone', 'Savannakhet', ST_GeomFromText('POLYGON((104.69 16.50,104.81 16.50,104.81 16.61,104.69 16.61,104.69 16.50))', 4326), 'lo'),
   ('vol-003', 'Sengmany Keodala', 'demo:encrypted:+856205550773', '0773', false, 'Ban Lak 35', 'Pakxong', 'Champasak', ST_GeomFromText('POLYGON((106.16 15.12,106.29 15.12,106.29 15.24,106.16 15.24,106.16 15.12))', 4326), 'lo'),
-  ('vol-user-test', 'External SMS/WhatsApp Test Device', 'demo:encrypted:+66879182825', '2825', true, 'Cross-border test handset', 'Thakhek', 'Khammouane', ST_GeomFromText('POLYGON((104.78 17.37,104.88 17.37,104.88 17.46,104.78 17.46,104.78 17.37))', 4326), 'en')
+  ('vol-user-test', 'External SMS/WhatsApp Test Device', 'demo:encrypted:+66XXXXXXXX25', '2825', true, 'Cross-border test handset', 'Thakhek', 'Khammouane', ST_GeomFromText('POLYGON((104.78 17.37,104.88 17.37,104.88 17.46,104.78 17.46,104.78 17.37))', 4326), 'en')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO notification_logs (id, alert_id, recipient_id, recipient_type, channel, status, sent_at, delivered_at, failed_reason)

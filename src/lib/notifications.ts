@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import type { Alert, NotificationLog, User, Volunteer } from "./types";
 
-function notificationId() {
+export function notificationId() {
   return `log-${randomUUID().slice(0, 8)}`;
 }
 
@@ -47,4 +47,26 @@ export function buildNotificationLogs(alert: Alert, volunteers: Volunteer[], use
   }
 
   return logs;
+}
+
+export function buildLiveWhatsAppLog(
+  alert: Alert,
+  result: { attempted: boolean; delivered: boolean; providerMessageId?: string; error?: string }
+): NotificationLog {
+  const now = new Date().toISOString();
+  return {
+    id: notificationId(),
+    alertId: alert.id,
+    recipientId: "whatsapp-test-recipient",
+    recipientType: "community_member",
+    channel: "WhatsApp",
+    status: !result.attempted ? "Failed" : result.delivered ? "Sent" : "Failed",
+    sentAt: now,
+    deliveredAt: result.delivered ? now : null,
+    failedReason: result.delivered
+      ? result.providerMessageId
+        ? `Meta message id: ${result.providerMessageId}`
+        : null
+      : result.error ?? "Live WhatsApp send failed"
+  };
 }

@@ -29,6 +29,8 @@ export type AlertStatus =
 
 export type NotificationChannel = "SMS" | "WhatsApp" | "Email" | "In-app";
 
+export type IntakeSourceType = "gmail" | "other_email" | "whatsapp_business" | "manual_upload";
+
 export type DisseminationMethod =
   | "Village loudspeaker"
   | "Door-to-door"
@@ -82,6 +84,47 @@ export interface AiAssessment {
   qualityFlags?: string[];
   translationConfidence?: number;
   generatedAt?: string;
+}
+
+export interface IntakeAttachmentSummary {
+  name: string;
+  type: string;
+  size: number;
+  extractedAs: "vision" | "file" | "text" | "metadata";
+  notes?: string;
+}
+
+export interface TargetAudiencePlan {
+  summary: string;
+  provinces: string[];
+  districts: string[];
+  priorityGroups: string[];
+  routingGroups: string[];
+  suggestedChannels: NotificationChannel[];
+  reviewerNotes?: string;
+}
+
+export interface AlertIntakeInput {
+  sourceType: IntakeSourceType;
+  sourceName: string;
+  rawText: string;
+  targetAudienceNotes?: string;
+  attachments?: IntakeAttachmentSummary[];
+}
+
+export interface AlertDraftProposal {
+  alertInput: AlertInput;
+  messageEn: string;
+  messageLo: string;
+  aiAssessment: AiAssessment;
+  sourceSummary: string;
+  evidenceSummary: string;
+  targetAudience: TargetAudiencePlan;
+  confidence: number;
+  qualityFlags: string[];
+  usedOpenAi: boolean;
+  model?: string;
+  createdAt: string;
 }
 
 export interface HazardData {
@@ -209,6 +252,13 @@ export const alertStatuses: AlertStatus[] = [
 ];
 
 export const notificationChannels: NotificationChannel[] = ["SMS", "WhatsApp", "Email", "In-app"];
+
+export const intakeSourceTypes: IntakeSourceType[] = [
+  "gmail",
+  "other_email",
+  "whatsapp_business",
+  "manual_upload"
+];
 
 export const disseminationMethods: DisseminationMethod[] = [
   "Village loudspeaker",

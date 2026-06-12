@@ -82,6 +82,8 @@ To add a response note:
 
 Use the Alerts page to create and publish an official alert.
 
+The AI intake panel can turn incoming reports into a human-reviewable alert draft. It accepts Gmail-style text, other email text, WhatsApp Business message content, uploaded images or screenshots, PDFs, and text documents. With `OPENAI_API_KEY` configured, the system asks OpenAI to read the evidence and synthesize a draft alert, target audience, routing groups, suggested channels, English/Lao messages, confidence, and quality flags. Without the key, the MVP uses deterministic demo extraction and marks that clearly for the reviewer.
+
 Alert creation fields:
 
 - Hazard type
@@ -110,6 +112,20 @@ Recommended workflow:
 10. Click `Send for review`.
 11. Click `Approve`.
 12. Click `Publish`.
+
+AI intake workflow:
+
+1. Open `Alerts`.
+2. Choose the source: `Gmail`, `Other email`, `WhatsApp Business`, or `Upload/manual`.
+3. Paste the incoming email, WhatsApp message, or field report text.
+4. Upload screenshots, images, PDFs, or text documents if available.
+5. Add reviewer routing notes, for example `Prioritize elders, children, schools, clinics, rescue boats, and neighboring district equipment`.
+6. Click `Analyze intake`.
+7. Review the AI proposal, quality flags, source summary, evidence summary, target audience, and suggested channels.
+8. Click `Apply to form` to edit fields manually, or click `Create AI draft` to create an `AI Generated` alert.
+9. Continue through `Send for review`, `Approve`, and `Publish`.
+
+The reviewer can change severity, location, target channels, audience routing notes, and messages before approval. AI intake does not publish or send messages automatically.
 
 Status flow:
 
@@ -218,6 +234,7 @@ Implemented:
 - English/Lao language toggle
 - Alert creation form
 - AI-assisted alert drafting mock
+- OpenAI-ready AI intake for Gmail-style reports, WhatsApp Business webhook content, uploaded images/screenshots, PDFs, and text documents
 - English and Lao message editing
 - Approval workflow
 - Simulated SMS, WhatsApp, email, and in-app delivery logs
@@ -236,13 +253,15 @@ Implemented:
 - Demo mode: in-memory seeded data
 - Geospatial model: alert points, hazard station points, volunteer assigned-area polygons
 - Notifications: simulated delivery log generation
-- AI: deterministic local drafting and risk-assessment mock
+- AI: OpenAI Responses API intake when `OPENAI_API_KEY` is configured, with deterministic local fallback for demos
 - Security model: role-based permission checks, demo MFA code, masked phone display, audit log table for database mode
 
 ### Important MVP Limitations
 
 - SMS and WhatsApp are logged only. They are not sent through real providers yet.
-- AI drafting is a local mock, not a connected production LLM.
+- AI intake uses OpenAI only when `OPENAI_API_KEY` is configured; otherwise it falls back to deterministic demo extraction.
+- Gmail is represented by a test endpoint and UI source type; production Gmail still requires Google OAuth, Gmail API scopes, and polling or Pub/Sub push setup.
+- WhatsApp incoming text is represented by a webhook-shaped endpoint; production attachment OCR still requires Meta Graph API media download.
 - NASA satellite map is a static WMS image layer, not a full interactive GIS engine yet.
 - MFA is a demo code, not a production identity provider.
 - Demo phone encryption is placeholder text and must be replaced with production encryption.
@@ -388,9 +407,35 @@ Pass condition:
 - Notification logs are created after publish.
 - Dashboard and reports update.
 
+### Test 3A: Create an Alert From AI Intake
+
+1. Sign in as `DMH Vientiane Duty Officer`.
+2. Open `Alerts`.
+3. In the AI intake panel, select `Gmail`.
+4. Paste this message:
+
+```text
+Subject: Urgent flood observation in Thakhek
+Village volunteers report fast rising Mekong water near schools and the morning market. Several elderly residents and children may need transport to higher ground before nightfall.
+```
+
+5. Add routing notes: `Prioritize elders, children, schools, clinics, rescue boats, and neighboring district equipment`.
+6. Click `Analyze intake`.
+7. Confirm the proposal includes Khammouane/Thakhek, priority groups, SMS/WhatsApp channels, and quality flags if the OpenAI key is missing.
+8. Click `Apply to form`.
+9. Edit any fields the reviewer wants to change.
+10. Click `Create AI draft`.
+11. Continue with `Send for review`, `Approve`, and `Publish`.
+
+Pass condition:
+
+- An `AI Generated` alert is created from the incoming report.
+- The reviewer can adjust channels and routing before approval.
+- Publishing still requires approval and creates only simulated notification logs in the MVP.
+
 ### Test 4: SMS and WhatsApp Logging With Test Number
 
-The current MVP includes a test volunteer for the number ending in `2825`, corresponding to the test handset `+66 87 918 2825`.
+The current MVP includes a test volunteer for a number ending in `2825`. Configure the full test handset number only in local or Vercel secrets.
 
 1. Confirm `External SMS/WhatsApp Test Device` appears in Contacts or Volunteers.
 2. Create an alert in `Khammouane` / `Thakhek`.
@@ -513,8 +558,15 @@ Current MVP variables:
 | `DATABASE_URL` | PostgreSQL/PostGIS connection string |
 | `NEXT_PUBLIC_APP_NAME` | Public app display name |
 | `OFFICIAL_MFA_DEMO_CODE` | Demo MFA code for official users |
+| `OPENAI_API_KEY` | OpenAI API key for AI intake and alert synthesis |
+| `OPENAI_INTAKE_MODEL` | OpenAI model used for intake analysis |
 | `SMS_GATEWAY_API_KEY` | Placeholder for SMS provider credential |
 | `WHATSAPP_BUSINESS_TOKEN` | Placeholder for WhatsApp Business credential |
+| `WHATSAPP_WEBHOOK_VERIFY_TOKEN` | Token for WhatsApp webhook verification |
+| `WHATSAPP_PHONE_NUMBER_ID` | WhatsApp Business phone number ID |
+| `GMAIL_CLIENT_ID` | Gmail OAuth client ID for future production integration |
+| `GMAIL_CLIENT_SECRET` | Gmail OAuth client secret for future production integration |
+| `GMAIL_REDIRECT_URI` | Gmail OAuth redirect URI |
 
 Recommended production additions:
 

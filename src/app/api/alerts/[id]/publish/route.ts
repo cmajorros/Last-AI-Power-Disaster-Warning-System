@@ -1,5 +1,6 @@
-import { buildNotificationLogs } from "@/lib/notifications";
+import { buildLiveWhatsAppLog, buildNotificationLogs } from "@/lib/notifications";
 import { error, ok, requirePermission } from "@/lib/api";
+import { sendLiveWhatsAppAlert } from "@/lib/whatsapp";
 import {
   addNotificationLogs,
   getAlertById,
@@ -26,6 +27,12 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
 
   const [volunteers, users] = await Promise.all([listVolunteers(), listUsers()]);
   const logs = buildNotificationLogs(updated, volunteers, users);
+  if (updated.communicationChannels.includes("WhatsApp")) {
+    const liveResult = await sendLiveWhatsAppAlert(updated);
+    if (liveResult.attempted || process.env.WHATSAPP_TEST_RECIPIENT) {
+      logs.push(buildLiveWhatsAppLog(updated, liveResult));
+    }
+  }
   await addNotificationLogs(logs, auth.user.id);
 
   return ok({ alert: updated, notificationLogs: logs });
