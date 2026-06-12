@@ -6,13 +6,24 @@ import { EmptyState, LogStatus, StatusPill, formatDate } from "./ui";
 
 export function NotificationTable({
   logs,
-  alerts
+  alerts,
+  volunteers = [],
+  users = []
 }: {
   logs: NotificationLog[];
   alerts: Alert[];
+  volunteers?: Volunteer[];
+  users?: User[];
 }) {
   const { t } = useLanguage();
   const alertName = (alertId: string) => alerts.find((alert) => alert.id === alertId)?.location ?? alertId;
+  const recipientName = (log: NotificationLog) => {
+    const volunteer = volunteers.find((item) => item.id === log.recipientId);
+    if (volunteer) return `${volunteer.name} · ****${volunteer.phoneLast4}`;
+    const user = users.find((item) => item.id === log.recipientId);
+    if (user) return `${user.name} · ****${user.phoneLast4}`;
+    return `${log.recipientType} · ${log.recipientId}`;
+  };
 
   if (logs.length === 0) return <EmptyState label={t("noData")} />;
 
@@ -33,7 +44,7 @@ export function NotificationTable({
             {logs.slice(0, 12).map((log) => (
               <tr key={log.id}>
                 <td className="px-4 py-3 font-semibold text-gov-ink">{alertName(log.alertId)}</td>
-                <td className="px-4 py-3 text-slate-600">{log.recipientType} · {log.recipientId}</td>
+                <td className="px-4 py-3 text-slate-600">{recipientName(log)}</td>
                 <td className="px-4 py-3 text-slate-600">{log.channel}</td>
                 <td className="px-4 py-3">
                   <LogStatus log={log} />

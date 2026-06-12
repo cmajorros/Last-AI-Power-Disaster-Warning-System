@@ -210,7 +210,12 @@ export function DashboardPage() {
 
           <section className="space-y-3">
             <h3 className="text-lg font-bold text-gov-ink">{t("recentLogs")}</h3>
-            <NotificationTable logs={data.notificationLogs} alerts={data.alerts} />
+            <NotificationTable
+              logs={data.notificationLogs}
+              alerts={data.alerts}
+              volunteers={data.volunteers}
+              users={data.users}
+            />
           </section>
 
           <section className="space-y-3">

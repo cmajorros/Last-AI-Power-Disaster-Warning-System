@@ -36,7 +36,7 @@ export function ContactsPage() {
       ) : (
         <div className="grid gap-6 xl:grid-cols-2">
           <section className="rounded-lg border border-gov-line bg-white p-4 shadow-panel">
-            <h3 className="text-lg font-bold text-gov-ink">{t("contacts")}</h3>
+            <h3 className="text-lg font-bold text-gov-ink">{t("officialDirectory")}</h3>
             <div className="mt-4 space-y-3">
               {data.users.map((user) => (
                 <div key={user.id} className="rounded-lg border border-gov-line p-4">
@@ -59,7 +59,7 @@ export function ContactsPage() {
           </section>
 
           <section className="rounded-lg border border-gov-line bg-white p-4 shadow-panel">
-            <h3 className="text-lg font-bold text-gov-ink">{t("volunteers")}</h3>
+            <h3 className="text-lg font-bold text-gov-ink">{t("villageVolunteerNetwork")}</h3>
             <div className="mt-4 space-y-3">
               {data.volunteers.map((volunteer) => (
                 <div key={volunteer.id} className="rounded-lg border border-gov-line p-4">
