@@ -1,5 +1,3 @@
-const nasaUrl = "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor&STYLES=&SRS=EPSG:4326&BBOX=100,13,108,23&WIDTH=1280&HEIGHT=900&FORMAT=image/jpeg";
-
 const dict = {
   en: {
     app: "Last AI Power Disaster Warning System",
@@ -30,6 +28,11 @@ const dict = {
     status: "Status",
     evidence: "Evidence summary",
     targetAudience: "Target audience routing",
+    forecast: "Forecast",
+    waterForecast: "Water-level forecast",
+    floodProbability: "Flood probability",
+    floodStart: "Expected flood start",
+    hazardOutlook: "Hazard outlook",
     note: "Hosted demo: communication providers are simulated here. The local MVP contains the full AI intake API scaffolding and provider configuration."
   },
   lo: {
@@ -84,6 +87,45 @@ const state = {
   ]
 };
 
+const forecasts = [
+  {
+    station: "Thakhek Mekong gauge",
+    province: "Khammouane",
+    waterLevel: "7.8 m",
+    trend: "+0.6 m / 24h",
+    rainfall: "112 mm",
+    probability: 78,
+    hazard: "Flood",
+    severity: "High",
+    start: "Day 2, Friday night",
+    action: "Prepare evacuation for elders, children, schools, clinics, and riverbank homes."
+  },
+  {
+    station: "Nam Khan upstream",
+    province: "Luang Prabang",
+    waterLevel: "5.9 m",
+    trend: "+0.3 m / 24h",
+    rainfall: "86 mm",
+    probability: 54,
+    hazard: "Flash flood / landslide",
+    severity: "Watch",
+    start: "Day 3, Saturday morning",
+    action: "Monitor mountain roads, bridges, and school transport routes."
+  },
+  {
+    station: "Bolaven highland cell",
+    province: "Champasak / Sekong",
+    waterLevel: "N/A",
+    trend: "Storm cell forming",
+    rainfall: "64 mm",
+    probability: 18,
+    hazard: "Hail / severe storm",
+    severity: "Low",
+    start: "Day 1, this evening",
+    action: "Secure roofs, markets, and temporary shelters; watch for lightning and hail."
+  }
+];
+
 const pages = ["dashboard", "alerts", "map", "volunteers", "contacts", "reports", "settings"];
 
 function t(key) {
@@ -135,9 +177,12 @@ function dashboardPage() {
   return `
     <section class="grid metrics">
       ${metric(t("active"), "18", "Flood, storm, and rainfall watch zones")}
-      ${metric(t("affected"), "46,800", "Vientiane, Luang Prabang, Khammouane, Savannakhet")}
-      ${metric(t("delivered"), String(state.logs.filter((log) => log[2] === "Delivered").length), "SMS / WhatsApp / in-app")}
-      ${metric(t("ack"), "2/3", "Village and rescue network")}
+      ${metric(t("waterForecast"), "7.8 m", "Thakhek gauge, rising +0.6 m / 24h")}
+      ${metric(t("floodProbability"), "78%", "High flood risk in Khammouane")}
+      ${metric(t("floodStart"), "Day 2", "Friday night if heavy rain continues")}
+    </section>
+    <section class="grid forecast-grid" style="margin-top:18px">
+      ${forecasts.map(forecastCard).join("")}
     </section>
     <section class="grid two" style="margin-top:18px">
       ${mapBlock()}
@@ -260,7 +305,41 @@ function metric(label, value, detail) {
 }
 
 function mapBlock() {
-  return `<div class="map"><img src="${nasaUrl}" alt="NASA satellite map over Laos" /><div class="pin" style="left:60%;top:52%"><span>Thakhek flood warning</span></div><div class="pin" style="left:56%;top:64%;background:var(--amber)"><span>Savannakhet rainfall watch</span></div><div class="pin" style="left:72%;top:78%;background:var(--green)"><span>Pakxong volunteer route</span></div></div>`;
+  return `<div class="map">
+    <div class="map-title">Laos operational forecast map</div>
+    <svg class="laos-shape" viewBox="0 0 360 520" role="img" aria-label="Operational map of Laos with forecast risk points">
+      <path d="M177 21 C215 55 236 87 223 118 C249 138 273 168 255 205 C284 234 292 281 263 316 C286 354 275 392 237 417 C228 460 195 504 158 496 C121 489 120 440 142 408 C95 377 96 332 128 301 C93 270 97 227 130 201 C99 164 109 122 146 102 C141 70 151 44 177 21 Z" />
+      <path d="M155 112 C184 131 215 140 240 164" />
+      <path d="M132 212 C172 225 217 245 252 278" />
+      <path d="M142 316 C179 330 220 356 241 394" />
+      <text x="175" y="95">Luang Prabang</text>
+      <text x="136" y="206">Vientiane</text>
+      <text x="170" y="300">Khammouane</text>
+      <text x="162" y="360">Savannakhet</text>
+      <text x="214" y="446">Bolaven</text>
+    </svg>
+    <div class="pin" style="left:59%;top:55%"><span>Thakhek flood risk 78%</span></div>
+    <div class="pin" style="left:48%;top:33%;background:var(--amber)"><span>Nam Khan flash flood 54%</span></div>
+    <div class="pin" style="left:69%;top:81%;background:var(--cyan)"><span>Bolaven hail risk 18%</span></div>
+    <div class="map-legend"><span class="legend red"></span> Flood <span class="legend amber"></span> Flash flood <span class="legend cyan"></span> Hail / storm</div>
+  </div>`;
+}
+
+function forecastCard(item) {
+  const tone = item.probability >= 70 ? "red" : item.probability >= 40 ? "amber" : "cyan";
+  return `<div class="forecast-card">
+    <div class="forecast-head">
+      <div><b>${item.station}</b><span>${item.province}</span></div>
+      <span class="pill ${tone}">${item.severity}</span>
+    </div>
+    <div class="forecast-values">
+      <div><span>Water</span><strong>${item.waterLevel}</strong><small>${item.trend}</small></div>
+      <div><span>Rainfall</span><strong>${item.rainfall}</strong><small>last 24h / forecast feed</small></div>
+      <div><span>${item.hazard}</span><strong>${item.probability}%</strong><small>${item.start}</small></div>
+    </div>
+    <div class="risk-bar"><i style="width:${item.probability}%"></i></div>
+    <p>${item.action}</p>
+  </div>`;
 }
 
 function sourceCard(title, detail, status) {
