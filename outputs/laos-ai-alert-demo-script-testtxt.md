@@ -1,217 +1,118 @@
-# Demo Script: AI Intake From `test.txt`
+# Demo Script: AI Intake, Dashboard Crisis Announcement, And Last-Mile Response
 
-Audience: project reviewers, disaster management stakeholders, pilot users  
-Duration: 10 minutes  
-Scenario: Lao-language crisis document to approved disaster alert
+Audience: project reviewers, disaster management stakeholders, pilot users
+Duration: 10 minutes
+Scenario: Lao crisis information becomes a reviewed alert and local action
+Live demo: https://laos-alert-mvp-siror-20260612.apac-disaste-1051.chatgpt-team.site/
+Demo recording: `outputs/laos-ai-alert-demo-screen-recording.gif`
 
 ## Roles In The Demo
 
 | Role | Demo user | What they show |
 | --- | --- | --- |
-| Meteorological Officer | DMH Vientiane Duty Officer | Uploads `test.txt`, uses AI intake, reviews and approves alert |
-| Emergency Response Unit | Khammouane PDRRMC Response Desk | Receives published alert and adds coordination notes |
-| CSO Coordinator | Lao Red Cross Savannakhet Coordinator | Monitors volunteers and area coverage |
-| Community Volunteer | Ban Nongbok Village Volunteer | Acknowledges receipt and records dissemination |
+| Meteorology Officer | DMH Vientiane Duty Officer | Clicks disaster-area marker, sets crisis announcement, uses AI intake, approves alert |
+| Emergency Response Unit | Khammouane PDRRMC Response Desk | Reviews affected area, businesses, equipment needs, and response logs |
+| CSO Coordinator | Lao Red Cross Coordinator | Reviews volunteer coverage and acknowledgment |
+| Village Volunteer | Ban Nongbok volunteer | Confirms loudspeaker/door-to-door dissemination |
+| Community Contact | Registered household or business focal point | Receives SMS/WhatsApp-style alert log |
 
 ## Demo Data Source
 
-Use this file:
-
-```text
-C:\Users\siror\Documents\test.txt
-```
-
-Interpreted demo situation:
-
-- Hazard: heavy rainfall and flood risk
-- Areas: Vientiane, Luang Prabang, Khammouane, Savannakhet
-- Impact: road closures, power interruption, residential flooding, temporary relocation
-- Recommended action: follow official updates, avoid affected travel, prepare emergency supplies, coordinate response
-- Priority groups: older people, children, schools, clinics, low-lying households, rescue teams
+Use `C:\Users\siror\Documents\test.txt` for the local AI intake scene. It represents a Lao-language crisis document with heavy rainfall, flood risk, road closure, power interruption, relocation, and coordination needs across Lao provinces.
 
 ## 10-Minute Run Of Show
 
-### 0:00-1:00 - Set The Stakes
+### 0:00-1:00 - Human Stakes
 
 Say:
 
-> In a flood, the most dangerous time is not only when water arrives. It is the gap between the first warning signal and the moment the right person receives clear instructions. This demo shows how Laos can reduce that gap.
+> The water does not wait for a perfect announcement. The first warning may arrive as an email, a WhatsApp photo, or a handwritten note. The question is whether the family, the school, and the rescue team get a clear message in time.
 
-Show:
+Show Dashboard, water-level forecast, flood probability, expected flood start, and Lao language toggle.
 
-- Dashboard
-- Active alerts
-- Map context over Laos
-- Delivery and acknowledgment metrics
+### 1:00-2:15 - Meteorology Officer Declares A Crisis
 
-### 1:00-2:30 - Incoming Report Arrives
+1. Click the square Thakhek disaster-area marker.
+2. Review the selected area, risk, province, and expected start.
+3. Set announcement level to `Crisis now` or `Disaster now`.
+4. Edit the message if needed.
+5. Click `Set announcement now`.
 
-Show:
+Say:
 
-- Open `Alerts`
-- Find `AI intake`
-- Source: `Upload/manual`
-- Source reference: `test.txt - Lao crisis situation document`
-- Attach `C:\Users\siror\Documents\test.txt`
-- Routing notes:
+> This is the moment the dashboard becomes operational. The officer is not only looking at the map; she is declaring what the map means for people.
 
-```text
-Prioritize older people, children, schools, clinics, low-lying households, rescue boats, and equipment support from neighboring districts.
-```
+Pass signal: announcement appears in Active alerts and a WhatsApp/SMS log is created.
+
+### 2:15-3:30 - AI Intake From Incoming Information
+
+Show Alerts and explain Gmail, WhatsApp Business, uploaded documents, images, screenshots, PDFs, OCR-ready files, and manual text. For local demo, upload `test.txt`.
+
+Routing note:
+
+`Prioritize elders, children, schools, clinics, rescue boats, pumps, rice mill workers, garment workshop transport, and village loudspeakers.`
+
+Say:
+
+> AI reads unstructured crisis information and turns it into a structured alert proposal. It is a drafting assistant, not the authority.
+
+### 3:30-5:00 - Reviewer Controls The Alert
+
+Show evidence summary, target audience, quality flags, suggested channels, English and Lao messages.
 
 Click:
 
-```text
-Analyze intake
-```
+1. `Apply to form` or `Create AI draft`.
+2. Edit location, severity, channels, and bilingual messages.
+3. `Send for review`.
+4. `Approve`.
+5. `Publish`.
 
 Say:
 
-> This could have arrived as a Gmail attachment, WhatsApp screenshot, field document, or OCR image. The key is that the platform can turn unstructured information into a structured alert proposal.
+> The system speeds up drafting, but public trust stays with the reviewer. Nothing goes out until a human approves it.
 
-### 2:30-4:00 - AI Creates A Draft
+### 5:00-6:30 - Human Map: Who Moves First
 
-Show:
-
-- Source summary
-- Evidence summary
-- Target audience
-- Suggested channels
-- Quality flags
-- Confidence
+Show Human Map, selected disaster area, people to mobilize first, and businesses/factories.
 
 Say:
 
-> The AI is not the authority. It is the drafting assistant. It classifies the hazard, proposes the audience, flags missing data, and drafts both messages. The human reviewer remains in control.
+> A disaster area is not just a polygon. It contains elders, children, patients, workers, schools, markets, rice stock, boats, pumps, and roads that may disappear before night.
 
-Click:
+### 6:30-7:45 - Contacts And Equipment Search
 
-```text
-Apply to form
-Create AI draft
-```
-
-### 4:00-5:30 - Reviewer Controls The Message
-
-Show:
-
-- English message
-- Lao message
-- Severity
-- Channels
-- Routing groups
-
-Edit if needed:
-
-```text
-Flood and heavy rainfall warning for affected Lao provinces. Low-lying homes, schools, market roads, and power services may be disrupted. Move older people, children, essential documents, medicines, and equipment to safe higher ground. Follow village volunteer and official instructions.
-```
-
-Click:
-
-```text
-Save
-```
+Show Contacts, upload a mock contact source, run AI detect, and ask: `Thakhek does not have enough pumps. Who can we contact to borrow equipment?`
 
 Say:
 
-> The reviewer can change the message, audience, channels, and severity. This prevents automation from becoming uncontrolled publication.
+> The contact database becomes operational memory: who can help, where they are, what equipment they have, and who should be called first.
 
-### 5:30-6:45 - Approval Workflow
+### 7:45-8:45 - Volunteer Acknowledgment
 
-Click in order:
-
-```text
-Send for review
-Approve
-Publish
-```
-
-Show status movement:
-
-```text
-AI Generated -> Under Review -> Approved -> Published
-```
+Show Volunteers and submit loudspeaker or door-to-door acknowledgment.
 
 Say:
 
-> The workflow protects public trust: no warning goes out until it is approved.
+> Delivery is not safety. Safety begins when someone confirms the message reached the household.
 
-### 6:45-8:00 - Last-Mile Communication
+### 8:45-10:00 - Reports And Close
 
-Show:
-
-- Dashboard delivery status
-- Reports
-- Failed notifications
-- Contacts or Volunteers
+Show delivery logs, failed SMS/WhatsApp report, and acknowledgment status.
 
 Say:
 
-> A national alert is only useful if it reaches the last mile. The platform logs SMS, WhatsApp, email, and in-app delivery, then connects the official warning to village volunteers.
-
-If live WhatsApp is configured, explain:
-
-> With Meta credentials active, publishing attempts one real WhatsApp send to the configured test recipient. Without those credentials, this demo safely uses simulated logs.
-
-### 8:00-9:00 - Volunteer Acknowledgment
-
-Show:
-
-- Volunteers page
-- Select published alert
-- Dissemination method: `Village loudspeaker`
-- Note:
-
-```text
-Volunteer confirmed loudspeaker announcement and checked elderly households near the river.
-```
-
-Click:
-
-```text
-Acknowledgment
-```
-
-Say:
-
-> The platform does not assume delivery equals safety. It asks volunteers to confirm what happened in the village.
-
-### 9:00-10:00 - Close With Impact
-
-Show:
-
-- Reports
-- Acknowledgment rate
-- Area coverage
-- Failed SMS/WhatsApp report
-
-Say:
-
-> The business and public-service impact is faster warning creation, clearer accountability, fewer missed households, and better coordination of rescue teams, equipment, and volunteer networks across provinces.
+> The impact is not just faster messages. It is earlier movement for elders and children, clearer coordination for factories and schools, and faster requests for boats, pumps, shelters, and rescue teams.
 
 ## Presenter Checklist
 
-Before starting:
-
-- Local app opens at `http://127.0.0.1:3000/`
-- `.env.local` has `OPENAI_API_KEY`
-- Sign in works with MFA `246810`
-- `C:\Users\siror\Documents\test.txt` exists
-- Browser is on the Dashboard
-
-During the demo:
-
-- Do not claim the test document is real.
-- Do not claim SMS/WhatsApp are live unless provider credentials are configured.
-- Emphasize human approval before publication.
-- Emphasize Lao/English editable messages.
-- Emphasize priority routing for older people, children, schools, clinics, rescue teams, and equipment support.
-
-Pass condition:
-
-- AI intake reads `test.txt`
-- Alert draft is created
-- Status reaches `Published`
-- Delivery logs appear
-- Volunteer acknowledgment appears
+- Live site or local app opens.
+- Language toggle works.
+- Dashboard marker click works.
+- Crisis announcement creates active alert/log.
+- AI intake explains Gmail, WhatsApp, documents, images, screenshots, OCR, and upload.
+- Human approval is emphasized.
+- Human Map shows people and businesses/factories.
+- Contacts shows AI upload/search mockup.
+- Volunteers and Reports show acknowledgment and delivery evidence.
+- State clearly: hosted demo simulates provider sending.

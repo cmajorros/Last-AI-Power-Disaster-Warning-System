@@ -363,6 +363,41 @@ textarea { min-height: 86px; resize: vertical; }
   text-transform: uppercase;
 }
 .area-summary strong { display: block; margin-top: 6px; }
+.area-summary.compact {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 14px;
+}
+.officer-panel {
+  display: grid;
+  gap: 12px;
+}
+.officer-panel label {
+  margin-top: 0;
+}
+.announcement-preview {
+  border-left: 5px solid var(--amber);
+  background: #fff7ed;
+  padding: 13px;
+}
+.announcement-preview.live {
+  border-left-color: var(--red);
+  background: #fef2f2;
+}
+.announcement-preview b,
+.announcement-preview span {
+  display: block;
+  font-weight: 900;
+}
+.announcement-preview p {
+  margin: 8px 0;
+  color: #334155;
+  line-height: 1.45;
+}
+.announcement-preview span {
+  color: var(--red);
+  font-size: 12px;
+  text-transform: uppercase;
+}
 .priority-list {
   display: flex;
   flex-wrap: wrap;
@@ -506,6 +541,7 @@ textarea { min-height: 86px; resize: vertical; }
   .metrics, .forecast-grid, .two, .form, .impact { grid-template-columns: 1fr; }
   .source-grid, .contact-grid { grid-template-columns: 1fr; }
   .area-summary, .business-row { grid-template-columns: 1fr; }
+  .area-summary.compact { grid-template-columns: 1fr; }
   .forecast-values { grid-template-columns: 1fr; }
   .timeline { grid-template-columns: 1fr; }
 }

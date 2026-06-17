@@ -1,202 +1,130 @@
-# Laos AI Disaster Alert Demo User Guide
+# Last AI Power Disaster Warning System User Manual
 
-Version: AI intake demo pack  
-Date: June 12, 2026  
-Local app: `http://127.0.0.1:3000/`  
-Demo source file: `C:\Users\siror\Documents\test.txt`
+Version: user testing pack
+Date: June 17, 2026
+Live demo: https://laos-alert-mvp-siror-20260612.apac-disaste-1051.chatgpt-team.site/
+Local app: `http://127.0.0.1:3000/`
+GitHub repository: https://github.com/cmajorros/Last-AI-Power-Disaster-Warning-System
 
-This guide explains how to demonstrate the Laos disaster alert platform using the provided `test.txt` file as incoming crisis information. The demo shows how a Lao-language document can be read by AI, converted into an alert draft, reviewed by an official, approved, and published through the last-mile communication workflow.
+This manual explains how to use the current MVP for an AI-powered disaster alert and last-mile communication platform for Laos. The hosted demo is designed for user testing; notification delivery is simulated unless real provider credentials are configured in the local or production environment.
 
-## Demo Goal
+## 1. Open The System
 
-Show a 10-minute end-to-end workflow:
+1. Open the live hosted demo or the local app.
+2. Use the left navigation to move between Dashboard, Alerts, Human Map, Volunteers, Contacts, Reports, and Settings.
+3. Use the language toggle in the top bar: `EN` for English and `LO ລາວ` for Lao.
+4. In the full local app, use MFA code `246810` for official demo users.
 
-1. A crisis report arrives as a document.
-2. The officer uploads `test.txt` in the Alerts page.
-3. OpenAI analyzes the content and drafts a hazard alert.
-4. The reviewer adjusts location, priority groups, channels, and message text.
-5. The reviewer sends the alert for review, approves it, and publishes it.
-6. The platform logs SMS, WhatsApp, email, and in-app delivery.
-7. Volunteers acknowledge receipt and record the dissemination method.
+## 2. Dashboard
 
-## What The Test File Represents
+The Dashboard is the command view for meteorology officers and response leads.
 
-`test.txt` is a Lao-language crisis test document. It describes a simulated situation where continuous heavy rainfall causes flooding risk across multiple Lao provinces, including Vientiane, Luang Prabang, Khammouane, and Savannakhet. It includes expected impacts such as temporary road closures, power disruption, flooding in residential areas, temporary relocation, and the need for emergency coordination.
+What you can see:
 
-Use it as an example of an incoming field document, email attachment, or WhatsApp attachment.
+- Active alerts and notification logs.
+- Water-level forecast for Thakhek Mekong gauge.
+- Flood probability, rainfall, hail/storm outlook, and expected flood start window.
+- Clickable square markers for Thakhek, Nam Khan, and Bolaven disaster areas.
+- Lao-localized names, hazards, delivery logs, and forecast descriptions when the Lao language is selected.
 
-## Before The Demo
+How to set an official crisis announcement:
 
-Confirm the local server is running:
+1. Open Dashboard.
+2. Click a square disaster-area marker on the map.
+3. Review the selected area, province, risk level, and expected start time.
+4. Choose an announcement level: `Watch now`, `Crisis now`, or `Disaster now`.
+5. Edit the announcement message if needed.
+6. Click `Set announcement now`.
+7. Confirm the announcement appears in Active alerts and a simulated WhatsApp/SMS log is created.
 
-```text
-http://127.0.0.1:3000/
-```
+## 3. Alerts And AI Intake
 
-Confirm local AI settings are active:
+Use Alerts to convert incoming reports into reviewed official warnings.
 
-```env
-OPENAI_API_KEY=<configured locally>
-OPENAI_INTAKE_MODEL=gpt-4.1-mini
-```
+Supported intake sources:
 
-For this demo, Gmail and WhatsApp live provider credentials are optional. Without live provider credentials, the app still demonstrates alert creation, approval, delivery logging, and volunteer acknowledgment.
+- Gmail-style email reports.
+- Other email text.
+- WhatsApp Business webhook messages.
+- Uploaded images, screenshots, PDFs, Word/Excel/text files, and OCR-ready attachments.
+- Manual text pasted by a reviewer.
 
-## Step 1: Sign In As The Officer
+Workflow:
 
-1. Open `http://127.0.0.1:3000/`.
-2. Select `DMH Vientiane Duty Officer`.
-3. Enter MFA code `246810` if requested.
-4. Click `Switch role`.
-5. Confirm the top navigation shows Dashboard, Alerts, Map, Volunteers, Contacts, Reports, and Settings.
+1. Open `Alerts`.
+2. Use the AI intake panel.
+3. Select or describe the source, such as `Gmail`, `WhatsApp Business`, or `Upload/manual`.
+4. Paste the incoming report or upload the test file `C:\Users\siror\Documents\test.txt`.
+5. Add reviewer routing notes, for example: `Prioritize elders, children, schools, clinics, rescue boats, pumps, and factory night-shift workers.`
+6. Click `Analyze intake`.
+7. Review the AI evidence summary, target audience, suggested channels, confidence, and quality flags.
+8. Click `Apply to form` or `Create AI draft`.
+9. Edit the English and Lao messages.
+10. Use the human workflow: `Send for review`, `Approve`, and `Publish`.
 
-## Step 2: Open AI Intake
+AI does not publish alerts by itself. The reviewer can change location, severity, audience routing, channels, and message text before approval.
 
-1. Click `Alerts`.
-2. In the left panel, find `AI intake`.
-3. Set `Source` to `Upload/manual`.
-4. Set `Source reference` to `test.txt - Lao crisis situation document`.
-5. In `Reviewer routing notes`, enter:
+## 4. Human Map
 
-```text
-Prioritize older people, children, schools, clinics, low-lying households, rescue boats, and equipment support from neighboring districts.
-```
+Use Human Map to understand who and what is inside the selected disaster area.
 
-6. In the attachment picker, select:
+Current mock areas:
 
-```text
-C:\Users\siror\Documents\test.txt
-```
+- Thakhek riverbank zone, Khammouane: flood risk, elders, children, hospital patients, garment workers, rice mill, market, cold storage, and ferry landing risk.
+- Nam Khan upstream villages, Luang Prabang: flash flood and landslide risk near schools, bridges, guesthouses, and boat operators.
+- Bolaven highland storm cell, Champasak/Sekong: hail and severe storm risk for coffee workers, temporary shelters, markets, and factories.
 
-7. Click `Analyze intake`.
+Steps:
 
-## Step 3: Review AI Output
+1. Open `Human Map`.
+2. Select a disaster area from the map or area buttons.
+3. Review affected people, expected start time, and people to mobilize first.
+4. Review businesses and factories in the area so response teams can protect workers, stock, equipment, and transport routes.
 
-After analysis, confirm the proposal shows:
+## 5. Contacts
 
-- Hazard type such as `Flood` or `Heavy rainfall`
-- Severity such as `Watch` or `Warning`
-- Lao provinces or affected areas from the document
-- Suggested channels including `SMS`, `WhatsApp`, and `In-app`
-- Priority groups such as older people, children, schools, clinics, and rescue teams
-- Quality flags if the source does not include exact population, district, or timing
+Use Contacts to prepare last-mile communication and resource coordination.
 
-Explain during the demo:
+Current features:
 
-> The AI does not publish anything. It only converts unstructured crisis information into a reviewer-controlled draft.
+- Upload a contact source such as a handwritten photo, phone screenshot, Excel roster, Word/PDF clinic list, or text file.
+- The mock AI contact intake classifies contacts as volunteer, rescue team, hospital/clinic, school, shelter, relief partner, equipment owner, or business/factory focal point.
+- The contact search assistant answers operational questions such as who to contact for pumps, generators, boats, lighting, clinic transfer, or school evacuation.
 
-## Step 4: Create The Alert Draft
+Example search:
 
-1. Click `Apply to form`.
-2. Review the alert fields.
-3. Adjust the location if needed, for example:
+`Thakhek does not have enough pumps. Who can we contact to borrow equipment?`
 
-```text
-Khammouane and Mekong riverbank communities
-```
+Expected answer: Bolikhamxay Equipment Pool for pumps/generators, plus Thakhek Rescue Unit for boats and field delivery.
 
-4. Keep channels selected:
+## 6. Volunteers
 
-```text
-SMS, WhatsApp, In-app
-```
-
-5. Click `Create AI draft`.
-6. Select the newly created alert from the alert list.
-
-Expected status:
-
-```text
-AI Generated
-```
-
-## Step 5: Review Messages
-
-In the alert detail panel:
-
-1. Check the English message.
-2. Check the Lao message.
-3. Edit either message if needed.
-4. Click `Save`.
-
-Suggested English message for the demo:
-
-```text
-Flood and heavy rainfall warning for affected Lao provinces. Low-lying homes, schools, market roads, and power services may be disrupted. Move older people, children, essential documents, medicines, and equipment to safe higher ground. Follow village volunteer and official instructions.
-```
-
-Suggested Lao message for the demo:
-
-```text
-ແຈ້ງເຕືອນນ້ໍາຖ້ວມ ແລະ ຝົນຕົກໜັກສໍາລັບເຂດທີ່ໄດ້ຮັບຜົນກະທົບໃນລາວ. ເຮືອນຢູ່ຕໍ່ໍາ, ໂຮງຮຽນ, ຖະໜົນຕະຫຼາດ ແລະ ໄຟຟ້າອາດຂັດຂ້ອງ. ໃຫ້ຍ້າຍຜູ້ສູງອາຍຸ, ເດັກນ້ອຍ, ເອກະສານສໍາຄັນ, ຢາ ແລະ ອຸປະກອນໄປບ່ອນສູງທີ່ປອດໄພ. ປະຕິບັດຕາມອາສາສະໝັກບ້ານ ແລະ ເຈົ້າໜ້າທີ່.
-```
-
-## Step 6: Approval Workflow
-
-Use the buttons in this order:
-
-1. `Send for review`
-2. `Approve`
-3. `Publish`
-
-Expected status flow:
-
-```text
-AI Generated -> Under Review -> Approved -> Published
-```
-
-Explain during the demo:
-
-> Human approval remains mandatory. AI speeds up drafting, but the official controls the final warning.
-
-## Step 7: Check Delivery Logs
-
-1. Open `Dashboard` or `Reports`.
-2. Confirm notification logs were created.
-3. Look for SMS, WhatsApp, email, and in-app channels.
-4. Confirm failed notifications, if any, appear in the failed notification report.
-
-If live WhatsApp credentials are configured, publishing attempts one real WhatsApp message to the configured test recipient. If credentials are missing, the app records simulated logs only.
-
-## Step 8: Volunteer Acknowledgment
+Use Volunteers to track whether people actually received and carried the warning.
 
 1. Open `Volunteers`.
-2. Select the published alert.
-3. Select a dissemination method:
-   - Village loudspeaker
-   - Door-to-door
-   - Community radio
-   - Local announcement
-4. Enter a note, for example:
+2. Select a published alert.
+3. Choose a dissemination method such as village loudspeaker, door-to-door, community radio, or local announcement.
+4. Enter a note, for example: `Loudspeaker used. Elder households closest to the Mekong bank checked first.`
+5. Submit acknowledgment or dissemination.
+6. Confirm the status appears in Dashboard and Reports.
 
-```text
-Village volunteer confirmed loudspeaker announcement and checked elderly households near the river.
-```
+## 7. Reports
 
-5. Click `Acknowledgment` or `Dissemination`.
-6. Return to `Dashboard` or `Reports` to show acknowledgment status.
+Use Reports to validate operational evidence:
 
-## Demo Talk Track
+- Alert delivery report.
+- Failed SMS/WhatsApp report.
+- Volunteer acknowledgment report.
+- Area coverage report.
+- Response activity report.
 
-Use this short story while clicking:
+A good demo should show both successful delivery logs and at least one failed or pending item so reviewers can see follow-up risk.
 
-> A disaster report arrives before a formal government announcement. It may be an email, a WhatsApp message, or a file attachment. In the old workflow, someone reads it manually, rewrites it, translates it, decides who should receive it, and then tries to coordinate volunteers. The delay is dangerous. In this platform, the officer uploads the report, AI extracts the hazard, location, impact, recommended action, and target audience. But the official still controls approval. Once approved, the platform routes messages through SMS, WhatsApp, email, in-app notifications, and the village volunteer network.
+## 8. Safety And Limitations
 
-## Pass Criteria
-
-The demo passes if:
-
-- `test.txt` can be uploaded in AI intake.
-- AI creates an alert proposal.
-- Reviewer can edit the alert before approval.
-- Alert status reaches `Published`.
-- Delivery logs are created.
-- Volunteer acknowledgment can be recorded.
-- English and Lao messages are visible and editable.
-
-## Known Limitations
-
-- Gmail polling requires Gmail OAuth credentials.
-- Real WhatsApp sending requires Meta WhatsApp Business credentials and a configured phone number ID.
-- The test document is a simulation and must not be treated as a real emergency.
-- Lao translations should be validated by qualified Lao disaster-risk communication reviewers before real use.
+- The hosted demo simulates SMS and WhatsApp delivery logs.
+- The local app can attempt live WhatsApp only when Meta credentials, phone number ID, and recipient settings are configured.
+- Gmail polling requires Google OAuth credentials.
+- Uploaded images/OCR are represented in the hosted demo; the local API includes OpenAI-ready scaffolding.
+- The map in the hosted demo is self-contained for reliability. NASA or other satellite layers should be treated as production GIS integrations.
+- Lao warning text must be reviewed by qualified Lao disaster-risk communication reviewers before real use.

@@ -1,200 +1,108 @@
-# ຄູ່ມືສາທິດລະບົບ Laos AI Disaster Alert
+# ຄູ່ມືຜູ້ໃຊ້ Last AI Power Disaster Warning System
 
-ສະບັບ: ຊຸດສາທິດ AI intake  
-ວັນທີ: 12 ມິຖຸນາ 2026  
-ແອັບໃນເຄື່ອງ: `http://127.0.0.1:3000/`  
-ໄຟລ໌ສາທິດ: `C:\Users\siror\Documents\test.txt`
+ສະບັບ: ຊຸດທົດສອບຜູ້ໃຊ້
+ວັນທີ: 17 ມິຖຸນາ 2026
+ເວັບສາທິດ: https://laos-alert-mvp-siror-20260612.apac-disaste-1051.chatgpt-team.site/
+ແອັບໃນເຄື່ອງ: `http://127.0.0.1:3000/`
+GitHub: https://github.com/cmajorros/Last-AI-Power-Disaster-Warning-System
 
-ຄູ່ມືນີ້ອະທິບາຍວິທີສາທິດລະບົບແຈ້ງເຕືອນໄພພິບັດຂອງລາວໂດຍໃຊ້ໄຟລ໌ `test.txt` ເປັນຂໍ້ມູນວິກິດທີ່ເຂົ້າມາ. ການສາທິດຈະສະແດງວ່າເອກະສານພາສາລາວຖືກ AI ອ່ານ, ປ່ຽນເປັນຮ່າງແຈ້ງເຕືອນ, ໃຫ້ເຈົ້າໜ້າທີ່ກວດທານ, ອະນຸມັດ ແລະ ເຜີຍແຜ່ຜ່ານຊ່ອງທາງສື່ສານຂັ້ນສຸດທ້າຍໄດ້ແນວໃດ.
+ຄູ່ມືນີ້ອະທິບາຍການໃຊ້ MVP ສໍາລັບລະບົບແຈ້ງເຕືອນໄພພິບັດ ແລະ ການສື່ສານໄປຮອດຊຸມຊົນໃນລາວ. ເວັບສາທິດໃຊ້ສໍາລັບທົດສອບຜູ້ໃຊ້. ການສົ່ງ SMS ແລະ WhatsApp ໃນເວັບສາທິດເປັນການຈໍາລອງ ຍົກເວັ້ນແຕ່ມີການຕັ້ງຄ່າ provider ຈິງໃນ local ຫຼື production.
 
-## ເປົ້າໝາຍການສາທິດ
+## 1. ເປີດລະບົບ
 
-ສະແດງ workflow ປະມານ 10 ນາທີ:
+1. ເປີດເວັບສາທິດ ຫຼື ແອັບ local.
+2. ໃຊ້ເມນູດ້ານຊ້າຍເພື່ອໄປ Dashboard, Alerts, Human Map, Volunteers, Contacts, Reports ແລະ Settings.
+3. ໃຊ້ປຸ່ມປ່ຽນພາສາ: `EN` ສໍາລັບອັງກິດ ແລະ `LO ລາວ` ສໍາລັບພາສາລາວ.
+4. ໃນແອັບ local ໃຫ້ໃຊ້ MFA code `246810` ສໍາລັບຜູ້ໃຊ້ທາງການຕົວຢ່າງ.
 
-1. ລາຍງານວິກິດເຂົ້າມາເປັນເອກະສານ.
-2. ເຈົ້າໜ້າທີ່ upload `test.txt` ໃນໜ້າ Alerts.
-3. OpenAI ວິເຄາະເນື້ອຫາ ແລະ ສ້າງຮ່າງແຈ້ງເຕືອນ.
-4. Reviewer ປັບພື້ນທີ່, ກຸ່ມຄວາມສໍາຄັນ, ຊ່ອງທາງ ແລະ ຂໍ້ຄວາມ.
-5. Reviewer ສົ່ງເຂົ້າກວດທານ, ອະນຸມັດ ແລະ ເຜີຍແຜ່.
-6. ລະບົບບັນທຶກການສົ່ງ SMS, WhatsApp, email ແລະ in-app.
-7. ອາສາສະໝັກຢືນຢັນການຮັບ ແລະ ບັນທຶກວິທີແຈ້ງຕໍ່.
+## 2. Dashboard
 
-## ໄຟລ໌ test.txt ແມ່ນຫຍັງ
+Dashboard ແມ່ນໜ້າພາບລວມສໍາລັບເຈົ້າໜ້າທີ່ອຸຕຸນິຍົມ ແລະ ທີມຕອບໂຕ້.
 
-`test.txt` ແມ່ນເອກະສານທົດສອບພາສາລາວ. ເນື້ອຫາອະທິບາຍສະຖານະການຈໍາລອງທີ່ຝົນຕົກໜັກຕໍ່ເນື່ອງ ແລະ ມີຄວາມສ່ຽງນ້ໍາຖ້ວມໃນຫຼາຍແຂວງ ເຊັ່ນ ວຽງຈັນ, ຫຼວງພະບາງ, ຄໍາມ່ວນ ແລະ ສະຫວັນນະເຂດ. ເນື້ອຫາລວມຜົນກະທົບເຊັ່ນ ຖະໜົນປິດຊົ່ວຄາວ, ໄຟຟ້າຂັດຂ້ອງ, ນ້ໍາຖ້ວມເຂດຢູ່ອາໄສ, ການຍ້າຍໄປສູນພັກພິງ ແລະ ການປະສານງານສຸກເສີນ.
+ສິ່ງທີ່ເຫັນໄດ້:
 
-ໃຊ້ໄຟລ໌ນີ້ເປັນຕົວຢ່າງຂອງເອກະສານຈາກພື້ນທີ່, email attachment ຫຼື WhatsApp attachment.
+- ແຈ້ງເຕືອນທີ່ກໍາລັງເປີດ ແລະ ບັນທຶກການສົ່ງ.
+- ພະຍາກອນລະດັບນໍ້າຂອງ ທ່າແຂກ.
+- ໂອກາດນໍ້າຖ້ວມ, ຝົນຕົກ, ຄວາມສ່ຽງໝາກເຫັບ/ພາຍຸ ແລະ ເວລາຄາດວ່າຈະເລີ່ມຖ້ວມ.
+- ຈຸດສີ່ຫຼ່ຽມທີ່ກົດໄດ້ ສໍາລັບ ທ່າແຂກ, ນໍ້າຄານ ແລະ ບໍລະເວນ.
+- ຊື່ພື້ນທີ່, ໄພ, ບັນທຶກການສົ່ງ ແລະ ຂໍ້ມູນພະຍາກອນເປັນພາສາລາວເມື່ອເລືອກ Lao.
 
-## ກ່ອນສາທິດ
+ວິທີຕັ້ງປະກາດສະຖານະວິກິດ:
 
-ກວດວ່າ server ໃນເຄື່ອງເປີດຢູ່:
+1. ເປີດ Dashboard.
+2. ກົດຈຸດສີ່ຫຼ່ຽມໃນແຜນທີ່.
+3. ກວດພື້ນທີ່, ແຂວງ, ຄວາມສ່ຽງ ແລະ ເວລາຄາດວ່າເລີ່ມ.
+4. ເລືອກລະດັບ: `Watch now`, `Crisis now`, ຫຼື `Disaster now`.
+5. ແກ້ໄຂຂໍ້ຄວາມປະກາດຖ້າຈໍາເປັນ.
+6. ກົດ `Set announcement now`.
+7. ກວດວ່າປະກາດປາກົດໃນ Active alerts ແລະ ມີ WhatsApp/SMS log ແບບຈໍາລອງ.
 
-```text
-http://127.0.0.1:3000/
-```
+## 3. Alerts ແລະ AI Intake
 
-ກວດວ່າ AI ໃຊ້ໄດ້:
+ໜ້າ Alerts ໃຊ້ເພື່ອປ່ຽນລາຍງານທີ່ເຂົ້າມາໃຫ້ເປັນແຈ້ງເຕືອນທາງການທີ່ມະນຸດກວດທານ.
 
-```env
-OPENAI_API_KEY=<configured locally>
-OPENAI_INTAKE_MODEL=gpt-4.1-mini
-```
+ຮອງຮັບແຫຼ່ງຂໍ້ມູນ:
 
-ສໍາລັບການສາທິດນີ້ Gmail ແລະ WhatsApp provider credentials ບໍ່ຈໍາເປັນ. ຖ້າບໍ່ມີ credentials, ແອັບຍັງສາມາດສາທິດການສ້າງ alert, approval, delivery logs ແລະ volunteer acknowledgment ໄດ້.
+- Gmail ຫຼື email.
+- WhatsApp Business webhook.
+- ຮູບ, screenshot, PDF, Word, Excel, text file ແລະ OCR-ready attachment.
+- ຂໍ້ຄວາມທີ່ reviewer ວາງເຂົ້າເອງ.
 
-## ຂັ້ນຕອນ 1: ເຂົ້າລະບົບເປັນ Officer
+ຂັ້ນຕອນ:
 
-1. ເປີດ `http://127.0.0.1:3000/`.
-2. ເລືອກ `DMH Vientiane Duty Officer`.
-3. ໃສ່ MFA code `246810` ຖ້າລະບົບຖາມ.
-4. ກົດ `Switch role`.
-5. ກວດວ່າ navigation ມີ Dashboard, Alerts, Map, Volunteers, Contacts, Reports ແລະ Settings.
+1. ເປີດ `Alerts`.
+2. ໃຊ້ສ່ວນ AI intake.
+3. ເລືອກ source ເຊັ່ນ `Gmail`, `WhatsApp Business`, ຫຼື `Upload/manual`.
+4. ວາງລາຍງານ ຫຼື upload `C:\Users\siror\Documents\test.txt`.
+5. ໃສ່ routing notes ເຊັ່ນ `Prioritize elders, children, schools, clinics, rescue boats, pumps, and factory night-shift workers.`
+6. ກົດ `Analyze intake`.
+7. ກວດ evidence summary, target audience, channels, confidence ແລະ quality flags.
+8. ກົດ `Apply to form` ຫຼື `Create AI draft`.
+9. ແກ້ໄຂຂໍ້ຄວາມອັງກິດ ແລະ ລາວ.
+10. ດໍາເນີນຕາມ workflow: `Send for review`, `Approve`, `Publish`.
 
-## ຂັ້ນຕອນ 2: ໃຊ້ AI Intake
+AI ບໍ່ເຜີຍແຜ່ແຈ້ງເຕືອນເອງ. Reviewer ສາມາດປ່ຽນພື້ນທີ່, ຄວາມຮ້າຍແຮງ, audience, channels ແລະ ຂໍ້ຄວາມກ່ອນອະນຸມັດ.
 
-1. ກົດ `Alerts`.
-2. ໃນ panel ຊ້າຍ ຫາ `AI intake`.
-3. ຕັ້ງ `Source` ເປັນ `Upload/manual`.
-4. ຕັ້ງ `Source reference` ເປັນ `test.txt - Lao crisis situation document`.
-5. ໃນ `Reviewer routing notes`, ໃສ່:
+## 4. Human Map
 
-```text
-Prioritize older people, children, schools, clinics, low-lying households, rescue boats, and equipment support from neighboring districts.
-```
+Human Map ໃຊ້ເພື່ອເບິ່ງວ່າໃນພື້ນທີ່ໄພພິບັດມີໃຜ ແລະ ມີຫຍັງຢູ່.
 
-6. ໃນ attachment picker, ເລືອກ:
+- ເຂດແຄມຂອງ ທ່າແຂກ: ສ່ຽງນໍ້າຖ້ວມ, ຜູ້ສູງອາຍຸ, ເດັກນ້ອຍ, ຄົນເຈັບ, ຄົນງານໂຮງງານ, ໂຮງສີ, ຕະຫຼາດ ແລະ ຈຸດຂ້າມເຮືອ.
+- ບ້ານແຄມນໍ້າຄານ: ສ່ຽງນໍ້າປ່າ/ດິນເຈື່ອນ ໃກ້ໂຮງຮຽນ, ຂົວ, ເຮືອນພັກ ແລະ ຜູ້ຂັບເຮືອ.
+- ພູພຽງບໍລະເວນ: ສ່ຽງໝາກເຫັບ/ພາຍຸ ສໍາລັບຄົນງານກາເຟ, ສູນພັກພິງ, ຕະຫຼາດ ແລະ ໂຮງງານ.
 
-```text
-C:\Users\siror\Documents\test.txt
-```
+## 5. Contacts
 
-7. ກົດ `Analyze intake`.
+Contacts ໃຊ້ເພື່ອກຽມການສື່ສານຂັ້ນສຸດທ້າຍ ແລະ ປະສານຊັບພະຍາກອນ.
 
-## ຂັ້ນຕອນ 3: ກວດຜົນຈາກ AI
+- Upload ແຫຼ່ງຂໍ້ມູນ contact ເຊັ່ນ ຮູບລາຍຊື່ຂຽນມື, screenshot, Excel, Word/PDF ຫຼື text file.
+- Mock AI contact intake ຈະແຍກປະເພດເປັນ volunteer, rescue team, hospital/clinic, school, shelter, relief partner, equipment owner, ຫຼື business/factory focal point.
+- Contact search assistant ຊ່ວຍຕອບຄໍາຖາມເຊັ່ນ ຈະຢືມ pump, generator, boat, lighting ຫຼື ຊ່ວຍຍ້າຍຄົນເຈັບໄດ້ຈາກໃຜ.
 
-ຫຼັງວິເຄາະ ໃຫ້ກວດວ່າ proposal ສະແດງ:
-
-- Hazard type ເຊັ່ນ `Flood` ຫຼື `Heavy rainfall`
-- Severity ເຊັ່ນ `Watch` ຫຼື `Warning`
-- ແຂວງ ຫຼື ພື້ນທີ່ທີ່ໄດ້ຮັບຜົນກະທົບ
-- Suggested channels ເຊັ່ນ `SMS`, `WhatsApp`, `In-app`
-- Priority groups ເຊັ່ນ ຜູ້ສູງອາຍຸ, ເດັກນ້ອຍ, ໂຮງຮຽນ, ຄລິນິກ ແລະ ທີມກູ້ໄພ
-- Quality flags ຖ້າເອກະສານຂາດຈໍານວນປະຊາກອນ, ເມືອງ ຫຼື ເວລາທີ່ແນ່ນອນ
-
-ຈຸດທີ່ຄວນເວົ້າໃນ demo:
-
-> AI ບໍ່ເຜີຍແຜ່ alert ອັດຕະໂນມັດ. AI ພຽງແຕ່ປ່ຽນຂໍ້ມູນບໍ່ມີໂຄງສ້າງໃຫ້ເປັນຮ່າງທີ່ reviewer ຄວບຄຸມໄດ້.
-
-## ຂັ້ນຕອນ 4: ສ້າງ Alert Draft
-
-1. ກົດ `Apply to form`.
-2. ກວດ fields ຂອງ alert.
-3. ປັບ location ຖ້າຈໍາເປັນ ເຊັ່ນ:
-
-```text
-Khammouane and Mekong riverbank communities
-```
-
-4. ເລືອກ channels:
-
-```text
-SMS, WhatsApp, In-app
-```
-
-5. ກົດ `Create AI draft`.
-6. ເລືອກ alert ໃໝ່ຈາກລາຍການ.
-
-ສະຖານະທີ່ຄາດຫວັງ:
-
-```text
-AI Generated
-```
-
-## ຂັ້ນຕອນ 5: ກວດຂໍ້ຄວາມ
-
-ໃນ alert detail panel:
-
-1. ກວດ English message.
-2. ກວດ Lao message.
-3. ແກ້ໄຂຂໍ້ຄວາມຖ້າຈໍາເປັນ.
-4. ກົດ `Save`.
-
-ຂໍ້ຄວາມພາສາອັງກິດສໍາລັບ demo:
-
-```text
-Flood and heavy rainfall warning for affected Lao provinces. Low-lying homes, schools, market roads, and power services may be disrupted. Move older people, children, essential documents, medicines, and equipment to safe higher ground. Follow village volunteer and official instructions.
-```
-
-ຂໍ້ຄວາມພາສາລາວສໍາລັບ demo:
-
-```text
-ແຈ້ງເຕືອນນ້ໍາຖ້ວມ ແລະ ຝົນຕົກໜັກສໍາລັບເຂດທີ່ໄດ້ຮັບຜົນກະທົບໃນລາວ. ເຮືອນຢູ່ຕໍ່ໍາ, ໂຮງຮຽນ, ຖະໜົນຕະຫຼາດ ແລະ ໄຟຟ້າອາດຂັດຂ້ອງ. ໃຫ້ຍ້າຍຜູ້ສູງອາຍຸ, ເດັກນ້ອຍ, ເອກະສານສໍາຄັນ, ຢາ ແລະ ອຸປະກອນໄປບ່ອນສູງທີ່ປອດໄພ. ປະຕິບັດຕາມອາສາສະໝັກບ້ານ ແລະ ເຈົ້າໜ້າທີ່.
-```
-
-## ຂັ້ນຕອນ 6: Approval Workflow
-
-ໃຊ້ປຸ່ມຕາມລໍາດັບ:
-
-1. `Send for review`
-2. `Approve`
-3. `Publish`
-
-ສະຖານະທີ່ຄາດຫວັງ:
-
-```text
-AI Generated -> Under Review -> Approved -> Published
-```
-
-ຈຸດທີ່ຄວນເວົ້າໃນ demo:
-
-> Human approval ຍັງເປັນຂັ້ນຕອນບັງຄັບ. AI ຊ່ວຍໃຫ້ຮ່າງໄວຂຶ້ນ, ແຕ່ເຈົ້າໜ້າທີ່ຄວບຄຸມຄໍາເຕືອນສຸດທ້າຍ.
-
-## ຂັ້ນຕອນ 7: ກວດ Delivery Logs
-
-1. ເປີດ `Dashboard` ຫຼື `Reports`.
-2. ກວດວ່າມີ notification logs.
-3. ຊອກຫາ channels: SMS, WhatsApp, email ແລະ in-app.
-4. ກວດ failed notifications ຖ້າມີ.
-
-ຖ້າຕັ້ງ live WhatsApp credentials ແລ້ວ, ເມື່ອ publish ລະບົບຈະພະຍາຍາມສົ່ງ WhatsApp ຈິງໄປຫາ test recipient. ຖ້າບໍ່ມີ credentials, ລະບົບຈະສ້າງ simulated logs ເທົ່ານັ້ນ.
-
-## ຂັ້ນຕອນ 8: Volunteer Acknowledgment
+## 6. Volunteers
 
 1. ເປີດ `Volunteers`.
-2. ເລືອກ published alert.
-3. ເລືອກ dissemination method:
-   - Village loudspeaker
-   - Door-to-door
-   - Community radio
-   - Local announcement
-4. ໃສ່ note:
+2. ເລືອກ alert ທີ່ Published.
+3. ເລືອກວິທີແຈ້ງຕໍ່: loudspeaker, door-to-door, community radio, ຫຼື local announcement.
+4. ໃສ່ note ເຊັ່ນ `Loudspeaker used. Elder households closest to the Mekong bank checked first.`
+5. ສົ່ງ acknowledgment/dissemination.
+6. ກວດ status ໃນ Dashboard ແລະ Reports.
 
-```text
-Village volunteer confirmed loudspeaker announcement and checked elderly households near the river.
-```
+## 7. Reports
 
-5. ກົດ `Acknowledgment` ຫຼື `Dissemination`.
-6. ກັບໄປ `Dashboard` ຫຼື `Reports` ເພື່ອສະແດງ acknowledgment status.
+Reports ຊ່ວຍກວດຫຼັກຖານການປະຕິບັດງານ:
 
-## ເນື້ອເວົ້າສໍາລັບ Demo
+- ລາຍງານການສົ່ງ alert.
+- ລາຍງານ SMS/WhatsApp ທີ່ສົ່ງບໍ່ສໍາເລັດ.
+- ລາຍງານ volunteer acknowledgment.
+- ລາຍງານ area coverage.
+- ລາຍງານ response activity.
 
-> ລາຍງານວິກິດມາຮອດກ່ອນການປະກາດທາງການ. ມັນອາດເປັນ email, WhatsApp message ຫຼື file attachment. ໃນ workflow ເກົ່າ ຕ້ອງມີຄົນອ່ານ, ຂຽນໃໝ່, ແປພາສາ, ຕັດສິນໃຈວ່າຈະສົ່ງໃຫ້ໃຜ ແລະ ປະສານອາສາສະໝັກ. ຄວາມຊ້ານັ້ນອັນຕະລາຍ. ໃນ platform ນີ້ ເຈົ້າໜ້າທີ່ upload report, AI ດຶງ hazard, location, impact, action ແລະ target audience. ແຕ່ official ຍັງອະນຸມັດກ່ອນສົ່ງສະເໝີ.
+## 8. ຂໍ້ຈໍາກັດ ແລະ ຄວາມປອດໄພ
 
-## ເງື່ອນໄຂຜ່ານ
-
-ການສາທິດຜ່ານຖ້າ:
-
-- Upload `test.txt` ໃນ AI intake ໄດ້.
-- AI ສ້າງ alert proposal.
-- Reviewer ແກ້ໄຂ alert ກ່ອນ approval ໄດ້.
-- Alert status ໄປຮອດ `Published`.
-- Delivery logs ຖືກສ້າງ.
-- Volunteer acknowledgment ຖືກບັນທຶກ.
-- English ແລະ Lao messages ສະແດງ ແລະ ແກ້ໄຂໄດ້.
-
-## ຂໍ້ຈໍາກັດ
-
-- Gmail polling ຕ້ອງການ Gmail OAuth credentials.
-- WhatsApp ຈິງຕ້ອງການ Meta WhatsApp Business credentials ແລະ phone number ID.
-- ເອກະສານທົດສອບເປັນສະຖານະການຈໍາລອງ ບໍ່ແມ່ນເຫດການຈິງ.
-- ຂໍ້ຄວາມພາສາລາວຄວນຖືກກວດໂດຍຜູ້ຊ່ຽວຊານພາສາລາວ ແລະ disaster-risk communication ກ່ອນໃຊ້ຈິງ.
+- ເວັບສາທິດຈໍາລອງ SMS ແລະ WhatsApp logs.
+- WhatsApp ຈິງຕ້ອງມີ Meta credentials, phone number ID ແລະ recipient/template settings.
+- Gmail polling ຕ້ອງມີ Google OAuth credentials.
+- ໃນເວັບສາທິດ OCR/AI upload ເປັນ mockup; local API ມີ scaffolding ສໍາລັບ OpenAI.
+- ແຜນທີ່ໃນ hosted demo ເປັນ self-contained operational map ເພື່ອໃຫ້ render ໄດ້ສະເໝີ. NASA ຫຼື GIS layer ອື່ນໆແມ່ນງານ production integration.
+- ຂໍ້ຄວາມເຕືອນພາສາລາວຕ້ອງຖືກກວດໂດຍຜູ້ຊ່ຽວຊານກ່ອນນໍາໃຊ້ຈິງ.
