@@ -68,6 +68,43 @@ const dict = {
   }
 };
 
+dict.lo = {
+  app: "ລະບົບແຈ້ງເຕືອນໄພພິບັດລາວ",
+  context: "ແພລດຟອມ AI ສໍາລັບແຈ້ງເຕືອນ ແລະ ສື່ສານຫາຊຸມຊົນ",
+  dashboard: "ແດຊບອດ",
+  alerts: "ແຈ້ງເຕືອນ",
+  map: "ແຜນທີ່ມະນຸດ",
+  volunteers: "ອາສາສະໝັກ",
+  contacts: "ຜູ້ຕິດຕໍ່",
+  reports: "ລາຍງານ",
+  settings: "ຕັ້ງຄ່າ",
+  title: "ແດຊບອດປະຕິບັດງານ",
+  subtitle: "ສາທິດລະດັບຊາດລາວ, ເວລາວຽງຈັນ UTC+7",
+  active: "ແຈ້ງເຕືອນທີ່ເປີດ",
+  affected: "ປະຊາກອນທີ່ກະທົບ",
+  delivered: "ບັນທຶກການສົ່ງ",
+  ack: "ການຢືນຢັນຂອງອາສາ",
+  aiIntake: "ຮັບຂໍ້ມູນດ້ວຍ AI",
+  intakeSubtitle: "Gmail, WhatsApp Business, ເອກະສານ, ຮູບພາບ ແລະ OCR",
+  analyzeIntake: "ວິເຄາະຂໍ້ມູນ",
+  createDraft: "ສ້າງຮ່າງແຈ້ງເຕືອນ",
+  create: "ສ້າງແຈ້ງເຕືອນນໍ້າຖ້ວມ",
+  generate: "ສ້າງຮ່າງດ້ວຍ AI",
+  review: "ສົ່ງກວດທານ",
+  approve: "ອະນຸມັດ",
+  publish: "ເຜີຍແຜ່",
+  simulate: "ຈໍາລອງບັນທຶກ WhatsApp/SMS",
+  status: "ສະຖານະ",
+  evidence: "ສະຫຼຸບຫຼັກຖານ",
+  targetAudience: "ກຸ່ມເປົ້າໝາຍ",
+  forecast: "ພະຍາກອນ",
+  waterForecast: "ພະຍາກອນລະດັບນໍ້າ",
+  floodProbability: "ໂອກາດນໍ້າຖ້ວມ",
+  floodStart: "ເວລາຄາດວ່າຈະເລີ່ມຖ້ວມ",
+  hazardOutlook: "ພາບລວມຄວາມສ່ຽງ",
+  note: "ເວັບສາທິດນີ້ຈໍາລອງການສົ່ງຂໍ້ຄວາມ. MVP ທ້ອງຖິ່ນມີ API ສໍາລັບ AI intake ແລະ provider configuration."
+};
+
 const state = {
   lang: "en",
   tab: "dashboard",
@@ -80,41 +117,42 @@ const state = {
   contactSearch: "Thakhek does not have enough pumps. Who can we contact to borrow equipment?",
   contactAnswer: "",
   logs: [
-    ["SMS", "Subscriber group: Thakhek riverbank villages", "Delivered"],
-    ["WhatsApp", "Village volunteer network ****0451", "Delivered"],
-    ["WhatsApp", "External test recipient ****2825", "Delivered"],
-    ["SMS", "Bolaven volunteer ****0773", "Failed"]
+    ["SMS", "Ban Nongbok, Thakhek riverbank households", "Delivered"],
+    ["WhatsApp", "Village volunteer group: Ban Phonxay / Ban Sibounheuang", "Delivered"],
+    ["WhatsApp", "DMH/PDRRMC external test recipient ****2825", "Delivered"],
+    ["SMS", "Bolaven coffee factory safety focal point ****0773", "Failed"]
   ],
   acknowledgments: [
-    ["Khamla Phengsavanh", "Village loudspeaker", "Acknowledged"],
-    ["Maly Chanthavong", "Door-to-door", "Pending"],
-    ["Thakhek Rescue Boat Team", "WhatsApp group", "Acknowledged"]
+    ["Khamla Phengsavanh - Ban Nongbok Nai", "Village loudspeaker + temple speaker", "Acknowledged"],
+    ["Maly Chanthavong - Ban Sibounheuang", "Door-to-door elder check", "Pending"],
+    ["Thakhek Rescue Boat Team - Mekong landing", "WhatsApp group + boat dispatch", "Acknowledged"],
+    ["Noy Sihavong - Ban Phonxay School", "Teacher phone tree", "Disseminated"]
   ],
   contactRecords: [
     {
       name: "Thakhek Rescue Unit",
       kind: "Rescue team",
-      area: "Thakhek",
+      area: "Ban Nongbok / Thakhek",
       province: "Khammouane",
-      capability: "Boats, ropes, first aid, night evacuation",
+      capability: "Flat-bottom boats, ropes, first aid, night evacuation from Mekong riverbank villages",
       phone: "+85620 **** 0451",
       priority: "High"
     },
     {
       name: "Mahaxay District Clinic",
       kind: "Hospital / clinic",
-      area: "Mahaxay",
+      area: "Mahaxay / Route 12 referral",
       province: "Khammouane",
-      capability: "Triage, elders, children, patient transfer",
+      capability: "Triage, elder patients, children, pregnancy cases, patient transfer coordination",
       phone: "+85620 **** 1182",
       priority: "High"
     },
     {
       name: "Savannakhet Provincial Shelter Desk",
       kind: "Shelter",
-      area: "Kaysone",
+      area: "Kaysone Phomvihane",
       province: "Savannakhet",
-      capability: "Temporary shelter, school gyms, food distribution",
+      capability: "Temporary shelter in school gyms, food distribution, family registration",
       phone: "+85620 **** 5520",
       priority: "Medium"
     },
@@ -132,7 +170,7 @@ const state = {
       kind: "Equipment owner",
       area: "Paksan",
       province: "Bolikhamxay",
-      capability: "Borrow pumps, generators, portable lighting",
+      capability: "Borrow pumps, generators, portable lighting, fuel cans for neighboring provinces",
       phone: "+85620 **** 8840",
       priority: "High"
     }
@@ -144,27 +182,29 @@ const disasterAreas = [
     id: "thakhek",
     name: "Thakhek riverbank zone",
     province: "Khammouane",
+    laoName: "ເຂດແຄມຂອງ ເມືອງທ່າແຂກ",
     hazard: "Flood",
     probability: 78,
     population: "18,400",
     floodStart: "Day 2, Friday night",
-    vulnerable: ["Elders", "Children", "Schools", "Clinics", "Riverbank households"],
+    vulnerable: ["Elders in Ban Nongbok", "Children at Ban Phonxay School", "Thakhek District Hospital patients", "Riverbank households", "Pregnant women and people with disabilities"],
     businesses: [
-      ["Mekong Logistics Cold Storage", "Food warehouse", "Backup power and road access risk"],
-      ["Thakhek Rice Mill", "Factory", "Workers and grain stock need early notice"],
-      ["Ban Nongbok Morning Market", "Market", "High foot traffic and drainage risk"],
-      ["Khammouane Garment Workshop", "Factory", "Shift workers may need transport"]
+      ["Mekong Logistics Cold Storage - Ban Thakhek Tai", "Food warehouse", "Backup power, refrigerated medicine/food stock, and road access risk"],
+      ["Thakhek Rice Mill Cooperative", "Factory", "Workers, rice stock, and grain dryers need early notice"],
+      ["Ban Nongbok Morning Market", "Market", "High foot traffic, elders, vendors, and drainage risk"],
+      ["Khammouane Garment Workshop", "Factory", "Shift workers may need transport before night flooding"]
     ]
   },
   {
     id: "namkhan",
     name: "Nam Khan upstream villages",
     province: "Luang Prabang",
+    laoName: "ບ້ານແຄມນ້ຳຄານ ແຂວງຫຼວງພະບາງ",
     hazard: "Flash flood / landslide",
     probability: 54,
     population: "7,200",
     floodStart: "Day 3, Saturday morning",
-    vulnerable: ["Mountain schools", "Bridge users", "Tourism operators", "Clinics"],
+    vulnerable: ["Mountain schools", "Bridge users near Pak Ou", "Guesthouses and boat operators", "Village health posts"],
     businesses: [
       ["Nam Khan Eco Lodge", "Tourism business", "Guest evacuation and river activity closure"],
       ["Luang Prabang Road Contractor Yard", "Equipment depot", "Excavators and trucks may support debris clearance"],
@@ -175,11 +215,12 @@ const disasterAreas = [
     id: "bolaven",
     name: "Bolaven highland storm cell",
     province: "Champasak / Sekong",
+    laoName: "ເຂດພູພຽງບໍລະເວນ",
     hazard: "Hail / severe storm",
     probability: 18,
     population: "4,900",
     floodStart: "Day 1, this evening",
-    vulnerable: ["Temporary shelters", "Outdoor workers", "Roof-fragile homes", "Market stalls"],
+    vulnerable: ["Coffee farm workers", "Temporary shelters", "Outdoor market stalls", "Roof-fragile homes"],
     businesses: [
       ["Bolaven Coffee Processing Plant", "Factory", "Roof, drying yard, and worker safety risk"],
       ["Pakse Fresh Produce Depot", "Food logistics", "Cold-chain backup and transport delay"],
@@ -314,8 +355,10 @@ function alertsPage() {
           <label>Severity<select><option>Watch</option><option>Warning</option><option>Emergency</option></select></label>
           <label>Province<input value="Khammouane" /></label>
           <label>District<input value="Thakhek" /></label>
-          <label class="wide">Location<input value="Multi-province flood watch from test.txt" /></label>
-          <label class="wide">Recommended action<textarea>Move elders, children, school groups, clinic patients, and essential supplies to higher ground. Avoid flooded roads and ferry crossings.</textarea></label>
+          <label>Village / cluster<input value="Ban Nongbok Nai, Ban Phonxay, Ban Sibounheuang" /></label>
+          <label>Local focal point<input value="Khammouane PDRRMC + Thakhek Rescue Unit" /></label>
+          <label class="wide">Location<input value="Mekong riverbank households near Thakhek morning market and ferry landing" /></label>
+          <label class="wide">Recommended action<textarea>Move elders, children, school groups, clinic patients, rice stock, and factory shift workers to the temple and upper school compound. Avoid the ferry landing, Route 13 low section, and flooded market roads.</textarea></label>
         </div>
         <div class="actions">
           <button class="primary" data-status="AI Generated">${t("generate")}</button>
@@ -342,8 +385,8 @@ function aiIntakePanel() {
       ${sourceCard("WhatsApp Business", "Webhook + attachments", "Cloud API-ready")}
       ${sourceCard("Upload / OCR", "test.txt, images, PDF", "Vision/OCR-ready")}
     </div>
-    <label class="wide">Incoming report<textarea>TEST-LAO-2026-001: Continuous heavy rainfall is affecting Vientiane, Luang Prabang, Khammouane, and Savannakhet. Roads, homes, power lines, schools, clinics, elders, and children may require priority support.</textarea></label>
-    <label class="wide">Reviewer routing notes<textarea>Prioritize elders, children, schools, clinics, rescue teams, shelter managers, boat operators, and village loudspeaker volunteers. Route through SMS, WhatsApp, in-app alerts, and local radio.</textarea></label>
+    <label class="wide">Incoming report<textarea>TEST-LAO-2026-001: Ban Nongbok Nai volunteers report Mekong water rising near Thakhek morning market, ferry landing, rice mill, and Ban Phonxay School. Elders, children, clinic patients, and garment workshop night-shift workers may need transport before Friday night.</textarea></label>
+    <label class="wide">Reviewer routing notes<textarea>Prioritize Ban Nongbok Nai elders, Ban Phonxay School, Thakhek District Hospital referral desk, rice mill workers, garment workshop transport, rescue boats, temple shelter team, and village loudspeaker volunteers.</textarea></label>
     <div class="actions">
       <button class="primary" data-analyze>${t("analyzeIntake")}</button>
       <button class="secondary" data-create-intake>${t("createDraft")}</button>
@@ -358,13 +401,13 @@ function alertReviewPanel() {
     <h3 class="section-title">${t("status")}: <span class="pill ${state.status === "Published" ? "red" : "blue"}">${state.status}</span></h3>
     <div class="badge-row"><span class="pill blue">${confidence}</span><span class="pill green">${draftLabel}</span></div>
     <div class="insight-list">
-      ${insight(t("evidence"), "Flood test alert states heavy rainfall, road closures, power outages, and temporary evacuation needs in four Lao provinces.")}
-      ${insight(t("targetAudience"), "Elders, children, pregnant women, people with disabilities, schools, clinics, riverbank villages, rescue teams, shelter teams.")}
-      ${insight("Suggested channels", "SMS, WhatsApp, in-app alert, village loudspeaker, local radio.")}
+      ${insight(t("evidence"), "Reports from Ban Nongbok Nai and Thakhek market indicate rising Mekong water, ferry landing risk, and possible access loss near rice mill and school routes.")}
+      ${insight(t("targetAudience"), "Ban Nongbok elders, Ban Phonxay School, Thakhek District Hospital patients, garment workers, rice mill staff, boat teams, temple shelter volunteers.")}
+      ${insight("Suggested channels", "SMS, WhatsApp, in-app alert, village loudspeaker, temple speaker, Lao radio message.")}
       ${insight("Quality flags", state.intakeAnalyzed ? "Test document; reviewer should verify affected villages and timing before publishing." : "Run AI intake to populate evidence and routing.")}
     </div>
-    <p><b>English message:</b> Flood watch issued for Vientiane, Luang Prabang, Khammouane, and Savannakhet. Prepare evacuation support for vulnerable people and avoid flooded roads.</p>
-    <p><b>Lao message:</b> ແຈ້ງເຕືອນນໍ້າຖ້ວມສໍາລັບຫຼາຍແຂວງໃນລາວ. ໃຫ້ກຽມພ້ອມຍ້າຍຄົນທີ່ມີຄວາມສ່ຽງໄປບ່ອນປອດໄພ.</p>
+    <p><b>English message:</b> Flood watch for Ban Nongbok Nai, Ban Phonxay, and nearby Thakhek riverbank villages. Move elders, children, patients, and night-shift workers to higher ground before Friday night.</p>
+    <p><b>Lao message:</b> ແຈ້ງເຕືອນນໍ້າຖ້ວມ ບ້ານໜອງບົກໃນ, ບ້ານໂພນໄຊ ແລະ ຊຸມຊົນແຄມຂອງ ເມືອງທ່າແຂກ. ໃຫ້ຍ້າຍຜູ້ສູງອາຍຸ, ເດັກນ້ອຍ, ຄົນເຈັບ ແລະ ຄົນງານກະກາງຄືນໄປບ່ອນສູງກ່ອນຄືນວັນສຸກ.</p>
     <p class="muted">Reviewer can change channels and audience routing before approval.</p>
     <div class="actions">
       <button class="secondary" data-status="Under Review">${t("review")}</button>
@@ -403,18 +446,35 @@ function mapPage() {
 }
 
 function volunteersPage() {
-  return `<section class="panel"><h3 class="section-title">${t("ack")}</h3><div class="ack-list">${state.acknowledgments.map(ackRow).join("")}</div><div class="actions"><button class="primary" data-ack>Acknowledge Ban Nongbok loudspeaker</button><button class="secondary" data-tab="reports">Open reports</button></div></section>`;
+  return `<section class="grid two">
+    <div class="panel">
+      <p class="eyebrow">Village network</p>
+      <h3 class="section-title">${t("ack")}</h3>
+      <div class="ack-list">${state.acknowledgments.map(ackRow).join("")}</div>
+      <div class="actions"><button class="primary" data-ack>Acknowledge Ban Nongbok loudspeaker</button><button class="secondary" data-tab="reports">Open reports</button></div>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">Localized volunteer roles</p>
+      <h3 class="section-title">Who carries the message</h3>
+      <div class="volunteer-grid">
+        ${volunteerCard("Ban Nongbok Nai loudspeaker lead", "Khamla Phengsavanh", "Lao", "Temple speaker, village loudspeaker, elder household check")}
+        ${volunteerCard("Ban Phonxay School focal point", "Noy Sihavong", "Lao / basic English", "Teacher phone tree, child pickup list, classroom headcount")}
+        ${volunteerCard("Mekong landing boat coordinator", "Thakhek Rescue Boat Team", "Lao", "Boat dispatch, life jackets, ferry landing closure")}
+        ${volunteerCard("Garment workshop worker liaison", "Maly Chanthavong", "Lao / Vietnamese", "Night-shift transport, factory WhatsApp group")}
+      </div>
+    </div>
+  </section>`;
 }
 
 function contactsPage() {
   return `<section class="grid two">
     <div class="panel ai-panel">
       <p class="eyebrow">AI contact intake</p>
-      <h3 class="section-title">Upload contact source</h3>
-      <p class="muted">Upload pictures, handwritten notes, screenshots, Excel, Word, PDF, or text files. The production backend would use OpenAI vision/OCR plus structured extraction to classify and save contacts.</p>
+      <h3 class="section-title">Upload Lao contact source</h3>
+      <p class="muted">Upload a village handwritten list, phone screenshot, Excel school roster, Word/PDF clinic list, or text file. The production backend would use OpenAI vision/OCR plus structured extraction to classify Lao contacts and save them by province, district, village, role, language, and equipment.</p>
       <label class="upload-box">
         <input type="file" data-contact-file accept="image/*,.pdf,.txt,.csv,.xlsx,.xls,.doc,.docx" />
-        <span>${state.contactUploadFileName || "Choose file or handwritten picture"}</span>
+        <span>${state.contactUploadFileName || "Choose file: handwritten Ban Nongbok contact sheet, school roster, clinic list"}</span>
       </label>
       <div class="actions">
         <button class="primary" data-contact-analyze>AI detect and record contacts</button>
@@ -423,8 +483,8 @@ function contactsPage() {
     </div>
     <div class="panel chat-panel">
       <p class="eyebrow">Contact search assistant</p>
-      <h3 class="section-title">Ask who to contact</h3>
-      <label class="wide">Question<input data-contact-search value="${escapeHtml(state.contactSearch)}" placeholder="Example: Which nearby province can lend pumps to Thakhek?" /></label>
+      <h3 class="section-title">Ask who to contact in Laos</h3>
+      <label class="wide">Question<input data-contact-search value="${escapeHtml(state.contactSearch)}" placeholder="Example: Thakhek has no pumps. Which nearby district can lend equipment?" /></label>
       <div class="actions"><button class="primary" data-contact-ask>Search contacts</button></div>
       <div class="chat-answer">${state.contactAnswer || defaultContactAnswer()}</div>
     </div>
@@ -455,17 +515,14 @@ function mapBlock(interactive = false) {
 
   return `<div class="map">
     <div class="map-title">Laos operational forecast map</div>
-    <svg class="laos-shape" viewBox="0 0 360 520" role="img" aria-label="Operational map of Laos with forecast risk points">
-      <path d="M177 21 C215 55 236 87 223 118 C249 138 273 168 255 205 C284 234 292 281 263 316 C286 354 275 392 237 417 C228 460 195 504 158 496 C121 489 120 440 142 408 C95 377 96 332 128 301 C93 270 97 227 130 201 C99 164 109 122 146 102 C141 70 151 44 177 21 Z" />
-      <path d="M155 112 C184 131 215 140 240 164" />
-      <path d="M132 212 C172 225 217 245 252 278" />
-      <path d="M142 316 C179 330 220 356 241 394" />
-      <text x="175" y="95">Luang Prabang</text>
-      <text x="136" y="206">Vientiane</text>
-      <text x="170" y="300">Khammouane</text>
-      <text x="162" y="360">Savannakhet</text>
-      <text x="214" y="446">Bolaven</text>
-    </svg>
+    <div class="map-river"></div>
+    <div class="laos-html-map" aria-label="Laos operational map with local disaster areas">
+      <div class="province-node north">Luang Prabang<br><small>Nam Khan</small></div>
+      <div class="province-node capital">Vientiane</div>
+      <div class="province-node center">Khammouane<br><small>Thakhek</small></div>
+      <div class="province-node south">Savannakhet</div>
+      <div class="province-node bolaven">Bolaven Plateau</div>
+    </div>
     ${pin("thakhek", "Thakhek flood risk 78%", "left:59%;top:55%")}
     ${pin("namkhan", "Nam Khan flash flood 54%", "left:48%;top:33%;background:var(--amber)", "amber")}
     ${pin("bolaven", "Bolaven hail risk 18%", "left:69%;top:81%;background:var(--cyan)", "cyan")}
@@ -475,6 +532,15 @@ function mapBlock(interactive = false) {
 
 function selectedDisasterArea() {
   return disasterAreas.find((item) => item.id === state.selectedArea) || disasterAreas[0];
+}
+
+function volunteerCard(role, name, language, method) {
+  return `<div class="volunteer-card">
+    <b>${role}</b>
+    <span>${name}</span>
+    <p>${method}</p>
+    <small>Language: ${language}</small>
+  </div>`;
 }
 
 function businessRow(item) {

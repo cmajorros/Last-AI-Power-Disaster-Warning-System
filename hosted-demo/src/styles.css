@@ -131,6 +131,65 @@ button { cursor: pointer; }
   font-size: 13px;
   letter-spacing: .04em;
 }
+.map-river {
+  position: absolute;
+  left: 50%;
+  top: 58px;
+  z-index: 1;
+  width: 120px;
+  height: 310px;
+  border-left: 4px solid rgba(6, 182, 212, .62);
+  border-radius: 55% 35% 60% 45%;
+  transform: rotate(-12deg);
+}
+.laos-html-map {
+  position: absolute;
+  inset: 58px 70px 52px 110px;
+  z-index: 2;
+}
+.province-node {
+  position: absolute;
+  min-width: 140px;
+  padding: 14px 16px;
+  border: 2px solid rgba(255,255,255,.68);
+  background: rgba(15, 23, 42, .72);
+  color: white;
+  font-weight: 900;
+  text-shadow: 0 1px 4px #000;
+  box-shadow: 0 10px 28px rgba(0,0,0,.25);
+}
+.province-node small {
+  color: #bfdbfe;
+  font-size: 12px;
+}
+.province-node.north {
+  top: 0;
+  left: 40%;
+  border-radius: 50% 48% 42% 54%;
+}
+.province-node.capital {
+  top: 110px;
+  left: 23%;
+  border-radius: 44% 58% 50% 42%;
+}
+.province-node.center {
+  top: 180px;
+  left: 44%;
+  border-color: rgba(248, 113, 113, .92);
+  background: rgba(127, 29, 29, .76);
+  border-radius: 50% 42% 58% 46%;
+}
+.province-node.south {
+  top: 258px;
+  left: 34%;
+  border-radius: 52% 45% 58% 48%;
+}
+.province-node.bolaven {
+  top: 318px;
+  left: 60%;
+  border-color: rgba(6, 182, 212, .86);
+  border-radius: 50%;
+}
 .laos-shape {
   position: absolute;
   inset: 28px 20px 18px 28px;
@@ -359,6 +418,32 @@ textarea { min-height: 86px; resize: vertical; }
   gap: 8px;
   color: var(--muted);
   font-size: 12px;
+  font-weight: 900;
+}
+.volunteer-grid {
+  display: grid;
+  gap: 10px;
+}
+.volunteer-card {
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  padding: 12px;
+}
+.volunteer-card b, .volunteer-card span, .volunteer-card small {
+  display: block;
+}
+.volunteer-card span {
+  margin-top: 4px;
+  color: var(--blue);
+  font-weight: 900;
+}
+.volunteer-card p {
+  margin: 8px 0;
+  color: #334155;
+  line-height: 1.4;
+}
+.volunteer-card small {
+  color: var(--muted);
   font-weight: 900;
 }
 .forecast-card {
