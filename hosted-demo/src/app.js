@@ -72,8 +72,13 @@ const state = {
   lang: "en",
   tab: "dashboard",
   status: "Published",
+  selectedArea: "thakhek",
   intakeAnalyzed: false,
   intakeCreated: true,
+  contactUploadAnalyzed: false,
+  contactUploadFileName: "",
+  contactSearch: "Thakhek does not have enough pumps. Who can we contact to borrow equipment?",
+  contactAnswer: "",
   logs: [
     ["SMS", "Subscriber group: Thakhek riverbank villages", "Delivered"],
     ["WhatsApp", "Village volunteer network ****0451", "Delivered"],
@@ -84,8 +89,104 @@ const state = {
     ["Khamla Phengsavanh", "Village loudspeaker", "Acknowledged"],
     ["Maly Chanthavong", "Door-to-door", "Pending"],
     ["Thakhek Rescue Boat Team", "WhatsApp group", "Acknowledged"]
+  ],
+  contactRecords: [
+    {
+      name: "Thakhek Rescue Unit",
+      kind: "Rescue team",
+      area: "Thakhek",
+      province: "Khammouane",
+      capability: "Boats, ropes, first aid, night evacuation",
+      phone: "+85620 **** 0451",
+      priority: "High"
+    },
+    {
+      name: "Mahaxay District Clinic",
+      kind: "Hospital / clinic",
+      area: "Mahaxay",
+      province: "Khammouane",
+      capability: "Triage, elders, children, patient transfer",
+      phone: "+85620 **** 1182",
+      priority: "High"
+    },
+    {
+      name: "Savannakhet Provincial Shelter Desk",
+      kind: "Shelter",
+      area: "Kaysone",
+      province: "Savannakhet",
+      capability: "Temporary shelter, school gyms, food distribution",
+      phone: "+85620 **** 5520",
+      priority: "Medium"
+    },
+    {
+      name: "Lao Red Cross Regional Coordinator",
+      kind: "Relief partner",
+      area: "Vientiane",
+      province: "Vientiane Capital",
+      capability: "Relief supplies, blankets, family kits",
+      phone: "+85620 **** 7004",
+      priority: "Medium"
+    },
+    {
+      name: "Bolikhamxay Equipment Pool",
+      kind: "Equipment owner",
+      area: "Paksan",
+      province: "Bolikhamxay",
+      capability: "Borrow pumps, generators, portable lighting",
+      phone: "+85620 **** 8840",
+      priority: "High"
+    }
   ]
 };
+
+const disasterAreas = [
+  {
+    id: "thakhek",
+    name: "Thakhek riverbank zone",
+    province: "Khammouane",
+    hazard: "Flood",
+    probability: 78,
+    population: "18,400",
+    floodStart: "Day 2, Friday night",
+    vulnerable: ["Elders", "Children", "Schools", "Clinics", "Riverbank households"],
+    businesses: [
+      ["Mekong Logistics Cold Storage", "Food warehouse", "Backup power and road access risk"],
+      ["Thakhek Rice Mill", "Factory", "Workers and grain stock need early notice"],
+      ["Ban Nongbok Morning Market", "Market", "High foot traffic and drainage risk"],
+      ["Khammouane Garment Workshop", "Factory", "Shift workers may need transport"]
+    ]
+  },
+  {
+    id: "namkhan",
+    name: "Nam Khan upstream villages",
+    province: "Luang Prabang",
+    hazard: "Flash flood / landslide",
+    probability: 54,
+    population: "7,200",
+    floodStart: "Day 3, Saturday morning",
+    vulnerable: ["Mountain schools", "Bridge users", "Tourism operators", "Clinics"],
+    businesses: [
+      ["Nam Khan Eco Lodge", "Tourism business", "Guest evacuation and river activity closure"],
+      ["Luang Prabang Road Contractor Yard", "Equipment depot", "Excavators and trucks may support debris clearance"],
+      ["Ban Pak Ou Boat Cooperative", "Transport", "River crossing suspension decision point"]
+    ]
+  },
+  {
+    id: "bolaven",
+    name: "Bolaven highland storm cell",
+    province: "Champasak / Sekong",
+    hazard: "Hail / severe storm",
+    probability: 18,
+    population: "4,900",
+    floodStart: "Day 1, this evening",
+    vulnerable: ["Temporary shelters", "Outdoor workers", "Roof-fragile homes", "Market stalls"],
+    businesses: [
+      ["Bolaven Coffee Processing Plant", "Factory", "Roof, drying yard, and worker safety risk"],
+      ["Pakse Fresh Produce Depot", "Food logistics", "Cold-chain backup and transport delay"],
+      ["Sekong Quarry Cooperative", "Industrial site", "Heavy equipment can support road clearance"]
+    ]
+  }
+];
 
 const forecasts = [
   {
@@ -274,7 +375,31 @@ function alertReviewPanel() {
 }
 
 function mapPage() {
-  return `<section class="grid two">${mapBlock()}<div class="panel"><h3 class="section-title">Human priority map</h3><div class="timeline">${["Elders mobilize first", "Children and schools", "Clinics and caregivers", "Rescue boats and pumps", "Volunteer confirmation"].map((s, i) => `<div class="step"><b>0${i + 1}</b>${s}</div>`).join("")}</div></div></section>`;
+  const area = selectedDisasterArea();
+  return `<section class="grid two">
+    <div>
+      ${mapBlock(true)}
+      <div class="area-selector">${disasterAreas.map((item) => `<button class="${state.selectedArea === item.id ? "active" : ""}" data-area="${item.id}">${item.name}</button>`).join("")}</div>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">Selected disaster area</p>
+      <h3 class="section-title">${area.name}</h3>
+      <div class="badge-row"><span class="pill red">${area.hazard}</span><span class="pill ${area.probability >= 70 ? "red" : area.probability >= 40 ? "amber" : "cyan"}">${area.probability}% risk</span></div>
+      <div class="area-summary">
+        <div><span>Province</span><strong>${area.province}</strong></div>
+        <div><span>Affected people</span><strong>${area.population}</strong></div>
+        <div><span>Expected start</span><strong>${area.floodStart}</strong></div>
+      </div>
+      <h3 class="section-title">People to mobilize first</h3>
+      <div class="priority-list">${area.vulnerable.map((item) => `<span>${item}</span>`).join("")}</div>
+      <h3 class="section-title" style="margin-top:18px">Businesses and factories in this area</h3>
+      <div class="business-list">${area.businesses.map((item) => businessRow(item)).join("")}</div>
+    </div>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <h3 class="section-title">Human priority workflow</h3>
+    <div class="timeline">${["Elders mobilize first", "Children and schools", "Clinics and caregivers", "Factories and worker transport", "Volunteer confirmation"].map((s, i) => `<div class="step"><b>0${i + 1}</b>${s}</div>`).join("")}</div>
+  </section>`;
 }
 
 function volunteersPage() {
@@ -282,14 +407,33 @@ function volunteersPage() {
 }
 
 function contactsPage() {
-  const contacts = [
-    ["Thakhek Rescue Unit", "Boats, ropes, first aid", "Khammouane"],
-    ["Mahaxay District Clinic", "Triage, elders, children", "Khammouane"],
-    ["Savannakhet Provincial Shelter Desk", "Temporary shelter", "Savannakhet"],
-    ["Lao Red Cross Regional Coordinator", "Relief supplies", "Vientiane"],
-    ["Neighboring district equipment pool", "Borrow pumps and generators", "Bolikhamxay"]
-  ];
-  return `<section class="panel"><h3 class="section-title">Contacts and regional equipment</h3><p class="muted">Reviewer can route alerts to people, teams, or equipment owners based on the affected area.</p><div class="contact-grid">${contacts.map((item) => `<div class="contact-card"><b>${item[0]}</b><p>${item[1]}</p><span class="pill blue">${item[2]}</span></div>`).join("")}</div></section>`;
+  return `<section class="grid two">
+    <div class="panel ai-panel">
+      <p class="eyebrow">AI contact intake</p>
+      <h3 class="section-title">Upload contact source</h3>
+      <p class="muted">Upload pictures, handwritten notes, screenshots, Excel, Word, PDF, or text files. The production backend would use OpenAI vision/OCR plus structured extraction to classify and save contacts.</p>
+      <label class="upload-box">
+        <input type="file" data-contact-file accept="image/*,.pdf,.txt,.csv,.xlsx,.xls,.doc,.docx" />
+        <span>${state.contactUploadFileName || "Choose file or handwritten picture"}</span>
+      </label>
+      <div class="actions">
+        <button class="primary" data-contact-analyze>AI detect and record contacts</button>
+      </div>
+      ${state.contactUploadAnalyzed ? contactExtractionPanel() : `<div class="empty-panel">Waiting for file analysis.</div>`}
+    </div>
+    <div class="panel chat-panel">
+      <p class="eyebrow">Contact search assistant</p>
+      <h3 class="section-title">Ask who to contact</h3>
+      <label class="wide">Question<input data-contact-search value="${escapeHtml(state.contactSearch)}" placeholder="Example: Which nearby province can lend pumps to Thakhek?" /></label>
+      <div class="actions"><button class="primary" data-contact-ask>Search contacts</button></div>
+      <div class="chat-answer">${state.contactAnswer || defaultContactAnswer()}</div>
+    </div>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <h3 class="section-title">Contact records</h3>
+    <p class="muted">Contacts are grouped by type so reviewers can quickly route alerts, borrow equipment, or mobilize facilities.</p>
+    <div class="contact-grid">${state.contactRecords.map(contactCard).join("")}</div>
+  </section>`;
 }
 
 function reportsPage() {
@@ -304,7 +448,11 @@ function metric(label, value, detail) {
   return `<div class="card metric"><span>${label}</span><strong>${value}</strong><p class="muted">${detail}</p></div>`;
 }
 
-function mapBlock() {
+function mapBlock(interactive = false) {
+  const pin = (id, label, style, tone = "") => interactive
+    ? `<button class="pin ${state.selectedArea === id ? "selected" : ""}" data-area="${id}" style="${style}"><span>${label}</span></button>`
+    : `<div class="pin ${tone}" style="${style}"><span>${label}</span></div>`;
+
   return `<div class="map">
     <div class="map-title">Laos operational forecast map</div>
     <svg class="laos-shape" viewBox="0 0 360 520" role="img" aria-label="Operational map of Laos with forecast risk points">
@@ -318,11 +466,19 @@ function mapBlock() {
       <text x="162" y="360">Savannakhet</text>
       <text x="214" y="446">Bolaven</text>
     </svg>
-    <div class="pin" style="left:59%;top:55%"><span>Thakhek flood risk 78%</span></div>
-    <div class="pin" style="left:48%;top:33%;background:var(--amber)"><span>Nam Khan flash flood 54%</span></div>
-    <div class="pin" style="left:69%;top:81%;background:var(--cyan)"><span>Bolaven hail risk 18%</span></div>
+    ${pin("thakhek", "Thakhek flood risk 78%", "left:59%;top:55%")}
+    ${pin("namkhan", "Nam Khan flash flood 54%", "left:48%;top:33%;background:var(--amber)", "amber")}
+    ${pin("bolaven", "Bolaven hail risk 18%", "left:69%;top:81%;background:var(--cyan)", "cyan")}
     <div class="map-legend"><span class="legend red"></span> Flood <span class="legend amber"></span> Flash flood <span class="legend cyan"></span> Hail / storm</div>
   </div>`;
+}
+
+function selectedDisasterArea() {
+  return disasterAreas.find((item) => item.id === state.selectedArea) || disasterAreas[0];
+}
+
+function businessRow(item) {
+  return `<div class="business-row"><div><b>${item[0]}</b><span>${item[1]}</span></div><p>${item[2]}</p></div>`;
 }
 
 function forecastCard(item) {
@@ -346,6 +502,64 @@ function sourceCard(title, detail, status) {
   return `<div class="source-card"><b>${title}</b><p>${detail}</p><span>${status}</span></div>`;
 }
 
+function contactExtractionPanel() {
+  return `<div class="extraction-panel">
+    <h3 class="section-title">Detected from ${state.contactUploadFileName || "uploaded file"}</h3>
+    <div class="insight-list">
+      ${insight("Detected contact type", "School evacuation focal point, rescue volunteer, equipment owner")}
+      ${insight("Extracted fields", "Name, role, area, phone, category, capability, priority")}
+      ${insight("Saved record", "Ban Sibounheuang School Evacuation Focal Point was added to contact records.")}
+    </div>
+  </div>`;
+}
+
+function contactCard(item) {
+  return `<div class="contact-card">
+    <div class="contact-head"><b>${item.name}</b><span class="pill ${item.priority === "High" ? "red" : "blue"}">${item.kind}</span></div>
+    <p>${item.capability}</p>
+    <div class="contact-meta"><span>${item.area}, ${item.province}</span><span>${item.phone}</span></div>
+  </div>`;
+}
+
+function defaultContactAnswer() {
+  return `<p><b>Suggested:</b> Contact Bolikhamxay Equipment Pool for pumps and generators, then alert Thakhek Rescue Unit for boat transport.</p><p class="muted">Reason: the selected area is Thakhek and the contact database shows a nearby equipment owner with pump/generator capacity.</p>`;
+}
+
+function buildContactAnswer(query) {
+  const text = query.toLowerCase();
+  if (text.includes("pump") || text.includes("equipment") || text.includes("borrow") || text.includes("generator")) {
+    return `<p><b>Best match:</b> Bolikhamxay Equipment Pool, Paksan. Capability: borrow pumps, generators, portable lighting.</p><p><b>Second call:</b> Thakhek Rescue Unit for boats and field delivery.</p><p class="muted">Route request through Khammouane PDRRMC and mark priority High because Thakhek flood probability is 78%.</p>`;
+  }
+  if (text.includes("hospital") || text.includes("clinic") || text.includes("patient")) {
+    return `<p><b>Best match:</b> Mahaxay District Clinic for triage and patient transfer.</p><p class="muted">Also notify Lao Red Cross Regional Coordinator for family kits and shelter support.</p>`;
+  }
+  if (text.includes("school") || text.includes("children")) {
+    return `<p><b>Best match:</b> Ban Sibounheuang School Evacuation Focal Point and Savannakhet Provincial Shelter Desk.</p><p class="muted">Use school lists for child-safe transport and reunification records.</p>`;
+  }
+  return defaultContactAnswer();
+}
+
+function addDetectedContact() {
+  if (state.contactRecords.some((item) => item.name === "Ban Sibounheuang School Evacuation Focal Point")) return;
+  state.contactRecords.unshift({
+    name: "Ban Sibounheuang School Evacuation Focal Point",
+    kind: "School",
+    area: "Thakhek",
+    province: "Khammouane",
+    capability: "Handwritten note detected: 120 students, 8 teachers, parent phone tree, evacuation pickup point",
+    phone: "+85620 **** 6190",
+    priority: "High"
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 function insight(title, body) {
   return `<div class="insight"><b>${title}</b><p>${body}</p></div>`;
 }
@@ -365,11 +579,30 @@ function ackRow(item) {
 function bind() {
   document.querySelectorAll("[data-tab]").forEach((btn) => btn.addEventListener("click", () => { state.tab = btn.dataset.tab; render(); }));
   document.querySelectorAll("[data-lang]").forEach((btn) => btn.addEventListener("click", () => { state.lang = btn.dataset.lang; render(); }));
+  document.querySelectorAll("[data-area]").forEach((btn) => btn.addEventListener("click", () => { state.selectedArea = btn.dataset.area; render(); }));
   document.querySelectorAll("[data-status]").forEach((btn) => btn.addEventListener("click", () => { state.status = btn.dataset.status; render(); }));
   document.querySelectorAll("[data-analyze]").forEach((btn) => btn.addEventListener("click", () => { state.intakeAnalyzed = true; state.status = "AI Generated"; render(); }));
   document.querySelectorAll("[data-create-intake]").forEach((btn) => btn.addEventListener("click", () => { state.intakeAnalyzed = true; state.intakeCreated = true; state.status = "AI Generated"; render(); }));
   document.querySelectorAll("[data-simulate]").forEach((btn) => btn.addEventListener("click", () => { state.logs.unshift(["WhatsApp", "External test recipient ****2825", "Delivered"]); state.tab = "dashboard"; render(); }));
   document.querySelectorAll("[data-ack]").forEach((btn) => btn.addEventListener("click", () => { state.acknowledgments[1][2] = "Acknowledged"; render(); }));
+  document.querySelectorAll("[data-contact-file]").forEach((input) => input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    state.contactUploadFileName = file ? file.name : "";
+    render();
+  }));
+  document.querySelectorAll("[data-contact-analyze]").forEach((btn) => btn.addEventListener("click", () => {
+    state.contactUploadAnalyzed = true;
+    if (!state.contactUploadFileName) state.contactUploadFileName = "handwritten-school-contact.jpg";
+    addDetectedContact();
+    render();
+  }));
+  document.querySelectorAll("[data-contact-search]").forEach((input) => input.addEventListener("input", () => {
+    state.contactSearch = input.value;
+  }));
+  document.querySelectorAll("[data-contact-ask]").forEach((btn) => btn.addEventListener("click", () => {
+    state.contactAnswer = buildContactAnswer(state.contactSearch);
+    render();
+  }));
 }
 
 render();
